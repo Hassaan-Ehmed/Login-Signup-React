@@ -13,12 +13,14 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { createInputFiles } from 'typescript';
-import {Link} from 'react-router-dom'
+import { Link } from 'react-router-dom';
+
+
 
 // TODO remove, this demo shouldn't need to reset the theme.
 const defaultTheme = createTheme();
 
-export default function SignUp() {
+export default function LogIn() {
 
 
     // all Regex Patters
@@ -29,6 +31,7 @@ const passwordRegex = /^.{8,}$/;
 const cityRegex = 
 /^(karachi|lahore|islamabad|peshawar|rawalpindi|faisalabad|multan|gujranwala)$/;
 
+const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
 
 const [userInfo,setUserInfo] = React.useState({
     fNameData:"",
@@ -77,50 +80,7 @@ const [state,setState] = React.useReducer((state:any,newState:any)=>(
 )
 
 React.useEffect(()=>{
-
-  let userInfoBox = JSON.parse(localStorage.getItem("userInfoBox") as any);
-
-
-  if(userInfoBox === null){
-
-    localStorage.setItem("userInfoBox",JSON.stringify([{
-      fNameData:"",
-      lNameData:"",
-      uNameData:"",
-      emailData:"",
-      passwordData:"",
-      cityData:"",
-      dateData:""
-    }]));
-  
-  }
-
-
-
-  if(state?.uName || state?.password){
-
-
-    userInfoBox?.map((userPacket:any)=>{
-
-      if(userPacket.email === state?.email){
-      
-        if(userPacket?.password === state?.password){
-          alert("This email is already exist!");
     
-        }else{
-          console.log("Choose different Passworp");
-        }
-      
-      
-      }else{
-      alert("this user no exsist!")
-      }
-    
-    
-    })
-
-  }
-
 if(state.fNameCheck){
 
 if(state?.fName.match(namesRegex)){
@@ -253,13 +213,6 @@ console.log(state.fNameError)
         cityCheck:false,
     })
 
-let userInfoBox = JSON.parse(localStorage.getItem("userInfoBox") as any);
-  
-let dataPacket = [...userInfoBox,userInfo];
-
-
-localStorage.setItem("userInfoBox",JSON.stringify(dataPacket));
-    
 }
 
   };
@@ -279,62 +232,22 @@ localStorage.setItem("userInfoBox",JSON.stringify(dataPacket));
         <CssBaseline />
         <Box
           sx={{
-            marginTop: 2,
+            marginTop: 10,
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
           }}
         >
-          <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+          <Avatar sx={{ m: 1, bgcolor: 'secondary.primary' }}>
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
-            Sign up
+            Log in
           </Typography>
           <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
             <Grid container spacing={2}>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  value={state?.fName ??   "---"}
-                  autoComplete="given-name"
-                  name="firstName"
-                  required
-                  fullWidth
-                  id="firstName"
-                  error={state?.fNameError ? true : false}
-                  label={state?.fNameError ?  "only characters allowed" : "First Name"}
-                  autoFocus
-
-onChange={(e) => {setState({fName : e?.target?.value}); setState({fNameCheck:true})}}
-                
-                />
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                value={state?.lName ?? "---"}
-                required
-                fullWidth
-                id="lastName"
-                error={state?.lNameError ? true : false}
-                label={state?.lNameError ?  "only characters allowed" : "Last Name"}
-                  name="lastName"
-                  autoComplete="family-name"
-                  onChange={(e) => {setState({lName : e?.target?.value}); setState({lNameCheck:true})}}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                value={state?.uName ?? "---"}
-                  required
-                  fullWidth
-                  id="username"
-                  error={state?.uNameError ? true : false}
-                  label={state?.uNameError ?  "username must be lowercase & numbers" : "User Name"}
-                  name="username"
-                  autoComplete="username"
-                  onChange={(e) => {setState({uName : e?.target?.value}); setState({uNameCheck:true})}}
-                />
-              </Grid>
+             
+             
               <Grid item xs={12}>
                 <TextField
                  value={state?.email ?? "---"}
@@ -365,40 +278,6 @@ onChange={(e) => {setState({fName : e?.target?.value}); setState({fNameCheck:tru
                 />
               </Grid>
 
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  value={state?.city ?? "---"}
-                  name="city"
-                  required
-                  fullWidth
-                  id="city"
-                  error={state?.cityError ? true : false}
-                  label={state?.cityError ?  "Invalid City" : "City"}
-                  autoFocus
-                  onChange={(e) => {setState({city : e?.target?.value}); setState({cityCheck:true})}}
-                  />
-              </Grid>
-
-              <Grid item xs={12} sm={6} sx={{position:"relative"}}>
-
-
-<input type='date'
- value={state?.date}
- 
- style={{
-    width:"100%",
-    height:"100%",
-    cursor:"pointer",
-    borderRadius:"5px",
-    border: state?.dateError ? "1px solid red" : "1px solid #bcbaba"
-}}
-
-
-onChange={(e) => {setState({date : e?.target?.value}); setState({dateCheck:true})}}
-/>
-
-
-              </Grid>
 
 
             </Grid>
@@ -411,14 +290,14 @@ onChange={(e) => {setState({date : e?.target?.value}); setState({dateCheck:true}
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
             >
-              Create account
+              Log in
             </Button>
             <Grid container justifyContent="flex-end">
               <Grid item>
-              <Link to={'/login'}>
+                <Link to={'/signup'}>
                 
                 <MUILink  variant="body2" >
-                  Already have an account? Login
+                  You don't have an account? Sign up
                 </MUILink>
                 
                 </Link>
