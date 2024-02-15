@@ -12,6 +12,9 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import dayjs, { Dayjs } from 'dayjs';
+import { createInputFiles } from 'typescript';
+
 
 function Copyright(props: any) {
   return (
@@ -30,22 +33,218 @@ function Copyright(props: any) {
 const defaultTheme = createTheme();
 
 export default function SignUp() {
+
+
+    // all Regex Patters
+const namesRegex = /^[A-Za-z]+$/;  // x2
+const userNameRgex = /^[a-z0-9]+$/;
+const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+const passwordRegex = /^.{8,}$/;
+const cityRegex = 
+/^(karachi|lahore|islamabad|peshawar|rawalpindi|faisalabad|multan|gujranwala)$/;
+
+const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
+
+const [userInfo,setUserInfo] = React.useState({
+    fNameData:"",
+    lNameData:"",
+    uNameData:"",
+    emailData:"",
+    passwordData:"",
+    cityData:"",
+    dateData:""
+
+}) 
+
+const [state,setState] = React.useReducer((state:any,newState:any)=>(
+    {...state,...newState} ),
+
+    {
+        
+         // Input Fields
+        fName:"",
+        lName:"",
+        uName:"",
+        email:"",
+        password:"",
+        city:"",
+        date:"2012-07-19",
+
+    // Input Fields Error
+    fNameError:false,       
+    lNameError:false,       
+    uNameError:false,
+    emailError:false,       
+    passwordError:false,       
+    cityError:false,
+
+
+    // Checks 
+    fNameCheck:false,       
+    lNameCheck:false,       
+    uNameCheck:false,
+    emailCheck:false,       
+    passwordCheck:false,       
+    cityCheck:false,
+
+
+    }
+)
+
+React.useEffect(()=>{
+    
+if(state.fNameCheck){
+
+if(state?.fName.match(namesRegex)){
+
+    setState({fNameError:false});
+    
+}else{
+    
+    setState({fNameError:true}); 
+
+}
+
+}
+
+if(state.lNameCheck){
+
+    if(state?.lName.match(namesRegex)){
+    
+        setState({lNameError:false});
+        
+    }else{
+        
+        setState({lNameError:true}); 
+    
+    }
+    
+    }
+    
+if(state.uNameCheck){
+
+    if(state?.uName.match(userNameRgex)){
+    
+        setState({uNameError:false});
+        
+    }else{
+        
+        setState({uNameError:true}); 
+    
+    }
+    
+    }
+    
+if(state.emailCheck){
+
+    if(state?.email.match(emailRegex)){
+    
+        setState({emailError:false});
+        
+    }else{
+        
+        setState({emailError:true}); 
+    
+    }
+    
+    }
+
+
+if(state.passwordCheck){
+
+    console.log(state.password)
+    if(state?.password.match(passwordRegex)){
+    
+        setState({passwordError:false});
+        
+    }else{
+        
+        setState({passwordError:true}); 
+    
+    }
+    
+    }
+    
+if(state.cityCheck){
+
+    if(state?.city.toLowerCase().match(cityRegex)){
+    
+        setState({cityError:false});
+        
+    }else{
+        
+        setState({cityError:true}); 
+    
+    }
+    
+    }
+    
+
+},[state.fName,state.lName,state.uName,state.email,state.password,state.city])
+
+console.log(state.fNameError)
+
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
+
+  if(
+    
+    (state?.fName && state?.lName && state?.uName && state?.email && state?.password && state?.city)
+    && 
+    ((!state.fNameError) && (!state.lNameError) && (!state.uNameError) && (!state.passwordError) && (!state.passwordError) && (!state.cityError))
+    
+    )
+{
+
+    setUserInfo
+    ({
+        fNameData:state?.fName,
+        lNameData:state?.lName,
+        uNameData:state?.uName,
+        emailData:state?.email,
+        passwordData:state?.password,
+        cityData:state?.city,
+        dateData:state?.date
+
     });
+
+    setState({
+        fName:"",
+        lName:"",
+        uName:"",
+        email:"",
+        password:"",
+        city:"",
+        date:"2012-07-19",
+
+        fNameCheck:false,       
+        lNameCheck:false,       
+        uNameCheck:false,
+        emailCheck:false,       
+        passwordCheck:false,       
+        cityCheck:false,
+    })
+
+}
+
   };
 
+
+  console.log(userInfo)
+
+
+//   const handleDate=(e: React.ChangeEvent<HTMLFormElement>)=>{
+
+// console.log(e.target.value);
+
+//   }
   return (
     <ThemeProvider theme={defaultTheme}>
       <Container component="main" maxWidth="xs">
         <CssBaseline />
         <Box
           sx={{
-            marginTop: 8,
+            marginTop: 2,
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
@@ -61,58 +260,116 @@ export default function SignUp() {
             <Grid container spacing={2}>
               <Grid item xs={12} sm={6}>
                 <TextField
+                  value={state?.fName ??   "---"}
                   autoComplete="given-name"
                   name="firstName"
                   required
                   fullWidth
                   id="firstName"
-                  label="First Name"
+                  error={state?.fNameError ? true : false}
+                  label={state?.fNameError ?  "only characters allowed" : "First Name"}
                   autoFocus
+
+onChange={(e) => {setState({fName : e?.target?.value}); setState({fNameCheck:true})}}
+                
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
                 <TextField
-                  required
-                  fullWidth
-                  id="lastName"
-                  label="Last Name"
+                value={state?.lName ?? "---"}
+                required
+                fullWidth
+                id="lastName"
+                error={state?.lNameError ? true : false}
+                label={state?.lNameError ?  "only characters allowed" : "Last Name"}
                   name="lastName"
                   autoComplete="family-name"
+                  onChange={(e) => {setState({lName : e?.target?.value}); setState({lNameCheck:true})}}
                 />
               </Grid>
               <Grid item xs={12}>
                 <TextField
+                value={state?.uName ?? "---"}
                   required
                   fullWidth
                   id="username"
-                  label="User Name"
+                  error={state?.uNameError ? true : false}
+                  label={state?.uNameError ?  "username must be lowercase & numbers" : "User Name"}
                   name="username"
                   autoComplete="username"
+                  onChange={(e) => {setState({uName : e?.target?.value}); setState({uNameCheck:true})}}
                 />
               </Grid>
               <Grid item xs={12}>
                 <TextField
+                 value={state?.email ?? "---"}
                   required
                   fullWidth
                   id="email"
-                  label="Email Address"
+                  error={state?.emailError ? true : false}
+                  label={state?.emailError ?  "incorrect email pattern" : "Email"}
                   name="email"
                   autoComplete="email"
-                />
+                  onChange={(e) => {setState({email : e?.target?.value}); setState({emailCheck:true})}}
+                  />
               </Grid>
               <Grid item xs={12}>
                 <TextField
-                  required
-                  fullWidth
-                  name="password"
-                  label="Password"
-                  type="password"
-                  id="password"
-                  autoComplete="new-password"
+                   value={state?.password ?? "---"}
+                   required
+                   fullWidth
+                   name="password"
+                   error={state?.passwordError ? true : false}
+                   label={state?.passwordError ?  "minimum 8 characters" : "Password"}
+                   type="password"
+                   id="password"
+                   autoComplete="new-password"
+                   
+                   onChange={(e) => {setState({password : e?.target?.value}); setState({passwordCheck:true})}}
+                  
                 />
               </Grid>
-              
+
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  value={state?.city ?? "---"}
+                  name="city"
+                  required
+                  fullWidth
+                  id="city"
+                  error={state?.cityError ? true : false}
+                  label={state?.cityError ?  "Invalid City" : "City"}
+                  autoFocus
+                  onChange={(e) => {setState({city : e?.target?.value}); setState({cityCheck:true})}}
+                  />
+              </Grid>
+
+              <Grid item xs={12} sm={6} sx={{position:"relative"}}>
+
+
+<input type='date'
+ value={state?.date}
+ 
+ style={{
+    width:"100%",
+    height:"100%",
+    cursor:"pointer",
+    borderRadius:"5px",
+    border: state?.dateError ? "1px solid red" : "1px solid #bcbaba"
+}}
+
+
+onChange={(e) => {setState({date : e?.target?.value}); setState({dateCheck:true})}}
+/>
+
+
+              </Grid>
+
+
             </Grid>
+
+
+
             <Button
               type="submit"
               fullWidth
