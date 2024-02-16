@@ -13,22 +13,24 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { createInputFiles } from 'typescript';
-import {Link} from 'react-router-dom'
-
+import {Link, useNavigate} from 'react-router-dom'
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 // TODO remove, this demo shouldn't need to reset the theme.
 const defaultTheme = createTheme();
 
 export default function SignUp() {
-
+  
+ const navigate = useNavigate()
 
     // all Regex Patters
-const namesRegex = /^[A-Za-z]+$/;  // x2
-const userNameRgex = /^[a-z0-9]+$/;
+const namesRegex = /^(?! )(?!\s+$)[A-Za-z\s]+$/;   // x2
+const userNameRegex = /^(?! )(?!\s+$)[a-z0-9\s]+$/;;
 const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 const passwordRegex = /^.{8,}$/;
 const cityRegex = 
 /^(karachi|lahore|islamabad|peshawar|rawalpindi|faisalabad|multan|gujranwala)$/;
 
+const [dataReady,setDataReady] = React.useState(false);
 
 const [userInfo,setUserInfo] = React.useState({
     fNameData:"",
@@ -64,6 +66,7 @@ const [state,setState] = React.useReducer((state:any,newState:any)=>(
     cityError:false,
 
 
+
     // Checks 
     fNameCheck:false,       
     lNameCheck:false,       
@@ -73,53 +76,33 @@ const [state,setState] = React.useReducer((state:any,newState:any)=>(
     cityCheck:false,
 
 
+
+
     }
 )
 
 React.useEffect(()=>{
 
-  let userInfoBox = JSON.parse(localStorage.getItem("userInfoBox") as any);
-
+  let userInfoBox = JSON.parse(localStorage.getItem("userInfoBox" ||"[]") as string);
 
   if(userInfoBox === null){
 
-    localStorage.setItem("userInfoBox",JSON.stringify([{
-      fNameData:"",
-      lNameData:"",
-      uNameData:"",
-      emailData:"",
-      passwordData:"",
-      cityData:"",
-      dateData:""
-    }]));
+    localStorage.setItem("userInfoBox",JSON.stringify([]));
   
-  }
+  }else if (dataReady){
+ 
+  let dataPacket = [...userInfoBox]
+
+  dataPacket.push(userInfo); 
+  
+  localStorage.setItem("userInfoBox",JSON.stringify(dataPacket));
+  
+  setDataReady(false);
+  
+}
 
 
 
-  if(state?.uName || state?.password){
-
-
-    userInfoBox?.map((userPacket:any)=>{
-
-      if(userPacket.email === state?.email){
-      
-        if(userPacket?.password === state?.password){
-          alert("This email is already exist!");
-    
-        }else{
-          console.log("Choose different Passworp");
-        }
-      
-      
-      }else{
-      alert("this user no exsist!")
-      }
-    
-    
-    })
-
-  }
 
 if(state.fNameCheck){
 
@@ -151,7 +134,7 @@ if(state.lNameCheck){
     
 if(state.uNameCheck){
 
-    if(state?.uName.match(userNameRgex)){
+    if(state?.uName.match(userNameRegex)){
     
         setState({uNameError:false});
         
@@ -208,71 +191,102 @@ if(state.cityCheck){
     }
     
 
-},[state.fName,state.lName,state.uName,state.email,state.password,state.city])
+},[state.fName,state.lName,state.uName,state.email,state.password,state.city,dataReady])
 
-console.log(state.fNameError)
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+
+
 
   if(
     
     (state?.fName && state?.lName && state?.uName && state?.email && state?.password && state?.city)
     && 
-    ((!state.fNameError) && (!state.lNameError) && (!state.uNameError) && (!state.passwordError) && (!state.passwordError) && (!state.cityError))
+    ((!state.fNameError) && (!state.lNameError) && (!state.uNameError) &&  (!state.emailError) &&(!state.passwordError) && (!state.passwordError) && (!state.cityError))
     
     )
 {
 
-    setUserInfo
-    ({
-        fNameData:state?.fName,
-        lNameData:state?.lName,
-        uNameData:state?.uName,
-        emailData:state?.email,
-        passwordData:state?.password,
-        cityData:state?.city,
-        dateData:state?.date
 
-    });
 
-    setState({
-        fName:"",
-        lName:"",
-        uName:"",
-        email:"",
-        password:"",
-        city:"",
-        date:"2012-07-19",
-
-        fNameCheck:false,       
-        lNameCheck:false,       
-        uNameCheck:false,
-        emailCheck:false,       
-        passwordCheck:false,       
-        cityCheck:false,
-    })
-
-let userInfoBox = JSON.parse(localStorage.getItem("userInfoBox") as any);
   
-let dataPacket = [...userInfoBox,userInfo];
+  if(state?.email && state?.password){
 
+    let userInfoBox = JSON.parse(localStorage.getItem("userInfoBox" ||"[]") as string);
 
-localStorage.setItem("userInfoBox",JSON.stringify(dataPacket));
+    const isEmailExsist = userInfoBox.find((userPacket: any) => userPacket.emailData === state.email);
     
+    if(!isEmailExsist){
+
+      const  isPasswordExsist = userInfoBox.find((userPacket: any) => userPacket.passwordData === state.password);
+      
+        if(!isPasswordExsist){
+         
+
+          setUserInfo
+          ((prevState)=>({
+      ...prevState,
+            fNameData:state?.fName,
+            lNameData:state?.lName,
+            uNameData:state?.uName,
+            emailData:state?.email,
+            passwordData:state?.password,
+            cityData:state?.city,
+            dateData:state?.date
+      
+        }));
+      
+      
+        setDataReady(true)
+      
+          setState({
+              fName:"",
+              lName:"",
+              uName:"",
+              email:"",
+              password:"",
+              city:"",
+              date:"2012-07-19",
+      
+              fNameCheck:false,       
+              lNameCheck:false,       
+              uNameCheck:false,
+              emailCheck:false,       
+              passwordCheck:false,       
+              cityCheck:false,
+          })
+
+      alert("Form Submit!");
+
+      setTimeout(()=>{
+        navigate('/login')
+      },1000)
+    
+        }else{
+          console.log("Choose Different Password!");
+        }
+      
+      
+      }else{
+        console.log("This user already Exsist!");
+      }
+    
+   
+
+  }
+
+  
+
+
+}else{
+
+  alert("Please Fill Proper Form!");
 }
 
   };
 
 
-  console.log(userInfo)
-
-
-//   const handleDate=(e: React.ChangeEvent<HTMLFormElement>)=>{
-
-// console.log(e.target.value);
-
-//   }
   return (
     <ThemeProvider theme={defaultTheme}>
       <Container component="main" maxWidth="xs">
@@ -285,8 +299,8 @@ localStorage.setItem("userInfoBox",JSON.stringify(dataPacket));
             alignItems: 'center',
           }}
         >
-          <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-            <LockOutlinedIcon />
+          <Avatar sx={{ m: 1, bgcolor: 'green' }}>
+          <AccountCircleIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
             Sign up
@@ -295,6 +309,7 @@ localStorage.setItem("userInfoBox",JSON.stringify(dataPacket));
             <Grid container spacing={2}>
               <Grid item xs={12} sm={6}>
                 <TextField
+                
                   value={state?.fName ??   "---"}
                   autoComplete="given-name"
                   name="firstName"
@@ -374,7 +389,7 @@ onChange={(e) => {setState({fName : e?.target?.value}); setState({fNameCheck:tru
                   id="city"
                   error={state?.cityError ? true : false}
                   label={state?.cityError ?  "Invalid City" : "City"}
-                  autoFocus
+               
                   onChange={(e) => {setState({city : e?.target?.value}); setState({cityCheck:true})}}
                   />
               </Grid>
@@ -397,7 +412,6 @@ onChange={(e) => {setState({fName : e?.target?.value}); setState({fNameCheck:tru
 onChange={(e) => {setState({date : e?.target?.value}); setState({dateCheck:true})}}
 />
 
-
               </Grid>
 
 
@@ -409,7 +423,9 @@ onChange={(e) => {setState({date : e?.target?.value}); setState({dateCheck:true}
               type="submit"
               fullWidth
               variant="contained"
-              sx={{ mt: 3, mb: 2 }}
+                sx={{ mt: 3, mb: 2,backgroundColor:"green", ": hover":{
+                  backgroundColor:"green"
+                } }}
             >
               Create account
             </Button>

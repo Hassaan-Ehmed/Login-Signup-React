@@ -13,8 +13,8 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { createInputFiles } from 'typescript';
-import { Link } from 'react-router-dom';
-
+import { Link, useNavigate } from 'react-router-dom';
+import VpnKeyIcon from '@mui/icons-material/VpnKey';
 
 
 // TODO remove, this demo shouldn't need to reset the theme.
@@ -22,205 +22,106 @@ const defaultTheme = createTheme();
 
 export default function LogIn() {
 
+const navigate = useNavigate();
 
-    // all Regex Patters
-const namesRegex = /^[A-Za-z]+$/;  // x2
-const userNameRgex = /^[a-z0-9]+$/;
-const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-const passwordRegex = /^.{8,}$/;
-const cityRegex = 
-/^(karachi|lahore|islamabad|peshawar|rawalpindi|faisalabad|multan|gujranwala)$/;
-
-const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
-
-const [userInfo,setUserInfo] = React.useState({
-    fNameData:"",
-    lNameData:"",
-    uNameData:"",
-    emailData:"",
-    passwordData:"",
-    cityData:"",
-    dateData:""
-
-}) 
-
-const [state,setState] = React.useReducer((state:any,newState:any)=>(
-    {...state,...newState} ),
-
-    {
-        
-         // Input Fields
-        fName:"",
-        lName:"",
-        uName:"",
-        email:"",
-        password:"",
-        city:"",
-        date:"2012-07-19",
-
-    // Input Fields Error
-    fNameError:false,       
-    lNameError:false,       
-    uNameError:false,
-    emailError:false,       
-    passwordError:false,       
-    cityError:false,
-
-
-    // Checks 
-    fNameCheck:false,       
-    lNameCheck:false,       
-    uNameCheck:false,
-    emailCheck:false,       
-    passwordCheck:false,       
-    cityCheck:false,
-
-
-    }
-)
-
-React.useEffect(()=>{
     
-if(state.fNameCheck){
-
-if(state?.fName.match(namesRegex)){
-
-    setState({fNameError:false});
+    const [state,setState] = React.useReducer((state:any,newState:any)=>(
+        {...state,...newState} ),
     
-}else{
-    
-    setState({fNameError:true}); 
-
-}
-
-}
-
-if(state.lNameCheck){
-
-    if(state?.lName.match(namesRegex)){
-    
-        setState({lNameError:false});
-        
-    }else{
-        
-        setState({lNameError:true}); 
-    
-    }
-    
-    }
-    
-if(state.uNameCheck){
-
-    if(state?.uName.match(userNameRgex)){
-    
-        setState({uNameError:false});
-        
-    }else{
-        
-        setState({uNameError:true}); 
-    
-    }
-    
-    }
-    
-if(state.emailCheck){
-
-    if(state?.email.match(emailRegex)){
-    
-        setState({emailError:false});
-        
-    }else{
-        
-        setState({emailError:true}); 
-    
-    }
-    
-    }
-
-
-if(state.passwordCheck){
-
-    console.log(state.password)
-    if(state?.password.match(passwordRegex)){
-    
-        setState({passwordError:false});
-        
-    }else{
-        
-        setState({passwordError:true}); 
-    
-    }
-    
-    }
-    
-if(state.cityCheck){
-
-    if(state?.city.toLowerCase().match(cityRegex)){
-    
-        setState({cityError:false});
-        
-    }else{
-        
-        setState({cityError:true}); 
-    
-    }
-    
-    }
-    
-
-},[state.fName,state.lName,state.uName,state.email,state.password,state.city])
-
-console.log(state.fNameError)
-
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-
-  if(
-    
-    (state?.fName && state?.lName && state?.uName && state?.email && state?.password && state?.city)
-    && 
-    ((!state.fNameError) && (!state.lNameError) && (!state.uNameError) && (!state.passwordError) && (!state.passwordError) && (!state.cityError))
-    
+        {
+            
+             // Input Fields
+            email:"",
+            password:"",
+           
+ 
+      }
     )
-{
-
-    setUserInfo
-    ({
-        fNameData:state?.fName,
-        lNameData:state?.lName,
-        uNameData:state?.uName,
-        emailData:state?.email,
-        passwordData:state?.password,
-        cityData:state?.city,
-        dateData:state?.date
-
-    });
-
-    setState({
-        fName:"",
-        lName:"",
-        uName:"",
-        email:"",
-        password:"",
-        city:"",
-        date:"2012-07-19",
-
-        fNameCheck:false,       
-        lNameCheck:false,       
-        uNameCheck:false,
-        emailCheck:false,       
-        passwordCheck:false,       
-        cityCheck:false,
-    })
-
-}
-
-  };
+    
+   
 
 
-  console.log(userInfo)
+      const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+    
+if((state?.email && state?.password) )
+    {
+    
 
+      if(((!state.emailError) && (!state.passwordError))){
+    
+     let userInfoBox = JSON.parse(localStorage.getItem("userInfoBox" ||"[]") as string);
+    
+    const user = userInfoBox.find((userPacket: any) => userPacket.emailData === state.email);
 
+    if (user) {
+  
+      if (user.passwordData === state?.password) {
+
+        let token = user.fNameData+"#123$^*#";
+        
+      localStorage.setItem("userToken",JSON.stringify(token));
+      
+      navigate(`/user/${user.fNameData.toLowerCase()}-${user.lNameData.toLowerCase()}`)
+      
+      } else {
+        alert("Incorrect Password!");
+      }
+    } else {
+      alert("This user doesn't exist!");
+    }
+  } else {
+    alert("Icorrect Credentials!");
+  }
+
+    }else {
+      alert("Please fill in both email and password fields!");
+    }
+    
+  }
+      // if((state?.email && !state.emailError && state.email.match(emailRegex)) || (state?.password && !state.passwordError && state.password.match(passwordRegex))){
+      // }
+    
+        // userInfoBox?.map((userPacket:any)=>{
+    
+        //   if(userPacket.emailData === state?.email){
+          
+        //     if(userPacket?.passwordData === state?.password){
+
+        //       console.log(`Welcome ${state.userPacket?.fNameData} ${state.userPacket?.lNameData}`);
+ 
+        //     }else  if (state?.password && !state.passwordError){
+        //       console.log("Incorrect Password !");
+           
+        //     }
+          
+          
+        //   }else {
+        //     console.log("this User don't Exsist!");
+          
+        //   }
+        
+        
+        // })
+    
+      
+  
+    
+    
+      // if(dataReady){
+          
+    
+      //   setDataReady(false)
+        
+      // }
+    
+    
+    
+    //   const handleDate=(e: React.ChangeEvent<HTMLFormElement>)=>{
+    
+    // console.log(e.target.value);
+    
+    //   }
 //   const handleDate=(e: React.ChangeEvent<HTMLFormElement>)=>{
 
 // console.log(e.target.value);
@@ -238,8 +139,9 @@ console.log(state.fNameError)
             alignItems: 'center',
           }}
         >
-          <Avatar sx={{ m: 1, bgcolor: 'secondary.primary' }}>
-            <LockOutlinedIcon />
+          <Avatar sx={{ m: 1, bgcolor: 'orange' }}>
+          <VpnKeyIcon/>
+
           </Avatar>
           <Typography component="h1" variant="h5">
             Log in
@@ -250,6 +152,7 @@ console.log(state.fNameError)
              
               <Grid item xs={12}>
                 <TextField
+                 autoFocus
                  value={state?.email ?? "---"}
                   required
                   fullWidth
@@ -288,7 +191,9 @@ console.log(state.fNameError)
               type="submit"
               fullWidth
               variant="contained"
-              sx={{ mt: 3, mb: 2 }}
+              sx={{ mt: 3, mb: 2 ,backgroundColor:"orange", ": hover":{
+                backgroundColor:"orange"
+              }}}
             >
               Log in
             </Button>
