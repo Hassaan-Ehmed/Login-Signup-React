@@ -1,14 +1,14 @@
-import React from 'react'
-import Table from '../components/MUI/Table'
-import { useNavigate, useParams } from 'react-router-dom'
-import LogoutIcon from '@mui/icons-material/Logout';
+import { useParams } from 'react-router-dom';
+import Header from '../components/Header';
 import Products from '../components/Products';
-import Navbar from '../components/Navbar';
 import { products } from '../data/data';
+import { useAppDispatch } from '../redux/hooks';
+import { setUserFullName } from '../redux/slices/products';
+import fastFood from '../images/fastFood3.jpg'
 export default function User() {
   
   const params = useParams();
-   const navigate = useNavigate();
+   const dispatch = useAppDispatch();
     
   let namePacket:any = params.name?.split("-");
 
@@ -16,34 +16,18 @@ export default function User() {
 const fName = `${namePacket[0]?.at(0)?.toUpperCase().concat(namePacket[0].slice(1))}`
 const lName = `${namePacket[1]?.at(0)?.toUpperCase().concat(namePacket[1].slice(1))}`
 
-const handleLogOut=()=>{
-    localStorage.removeItem("userToken");
+
+dispatch(setUserFullName(params?.name as any));
 
 
-    alert("Logout!");
-
-    setTimeout(()=>{
-
-        navigate('/login');
-    },1000)
-
-}
 
   return (
     <>
     
-<Navbar title={"Foods"}/>  
-    <div style={{width:"100%",display:"flex",justifyContent:"space-between",alignItems:"center"}}>
 
-<h1 style={{marginLeft:"20px"}}>Welcome {fName} {lName} !</h1>
+    <Header heading={"Fast Food Items"} img={fastFood}/>
 
-<LogoutIcon sx={{fontSize:"2.5vw",fontWeight:"bold",marginRight:"20px",cursor:"pointer"}}
-
-onClick={handleLogOut}
-/>
-    </div>
-
-<Products foodsArray={products}/>
+<Products foodsArray={products} forCart={false}/>
   
 </>
   )

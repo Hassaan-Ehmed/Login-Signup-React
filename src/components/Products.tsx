@@ -1,10 +1,9 @@
-import * as React from 'react';
-import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
-import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Grid';
+import Paper from '@mui/material/Paper';
+import { styled } from '@mui/material/styles';
 import Card from './MUI/Card';
-import { products } from '../data/data';
+import { useParams } from 'react-router-dom';
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -15,9 +14,12 @@ const Item = styled(Paper)(({ theme }) => ({
 }));
 
 
-export default function Products({foodsArray}:any) {
+export default function Products({foodsArray,forCart}:any) {
 
   const food:any = foodsArray
+
+  const params = useParams();
+
   
     return (
       <Box sx={{ flexGrow: 1 }}>
@@ -25,9 +27,9 @@ export default function Products({foodsArray}:any) {
 
           <Grid container item spacing={2}>
      {food.map((item:any,index:number)=>(
-      <Grid item xs={4}>
+      <Grid item xs={3}>
 
-       <Card key={item.id} title={item.title} desc={item.desc} price={item.price} foodPacket={item}/>
+       <Card  key={item.id} title={item.title} desc={item.desc} price={item.price} foodPacket={item} forCart={forCart}/>
     
       </Grid>
        ))}

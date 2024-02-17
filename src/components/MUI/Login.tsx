@@ -1,20 +1,16 @@
-import * as React from 'react';
-import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
-import CssBaseline from '@mui/material/CssBaseline';
-import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
-import {Link as MUILink} from '@mui/material';
-import Grid from '@mui/material/Grid';
-import Box from '@mui/material/Box';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import Typography from '@mui/material/Typography';
-import Container from '@mui/material/Container';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { createInputFiles } from 'typescript';
-import { Link, useNavigate } from 'react-router-dom';
 import VpnKeyIcon from '@mui/icons-material/VpnKey';
+import { Link as MUILink } from '@mui/material';
+import Avatar from '@mui/material/Avatar';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import Container from '@mui/material/Container';
+import CssBaseline from '@mui/material/CssBaseline';
+import Grid from '@mui/material/Grid';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import TextField from '@mui/material/TextField';
+import Typography from '@mui/material/Typography';
+import * as React from 'react';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 
 
 // TODO remove, this demo shouldn't need to reset the theme.
@@ -23,22 +19,26 @@ const defaultTheme = createTheme();
 export default function LogIn() {
 
 const navigate = useNavigate();
+const params = useParams();
 
     
     const [state,setState] = React.useReducer((state:any,newState:any)=>(
         {...state,...newState} ),
     
-        {
-            
-             // Input Fields
-            email:"",
-            password:"",
-           
- 
-      }
+        {email:"",password:""}
     )
     
-   
+   React.useEffect(()=>{
+
+     let userInfoBox = JSON.parse(localStorage.getItem("userInfoBox" ||"[]") as string);
+    
+     if(userInfoBox === null){
+
+      localStorage.setItem("userInfoBox",JSON.stringify([]));
+}
+
+
+   })
 
 
       const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {

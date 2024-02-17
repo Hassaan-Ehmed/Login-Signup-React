@@ -1,12 +1,11 @@
-import * as React from 'react';
+import { Card as MUICard } from '@mui/material';
 import Box from '@mui/material/Box';
-import {Card as MUICard} from '@mui/material';
+import Button from '@mui/material/Button';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
-import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import { useAppDispatch } from '../../redux/hooks';
-import { addToCart } from '../../redux/slices/products';
+import { addToCart, removeFromCart } from '../../redux/slices/products';
 
 const bull = (
   <Box
@@ -17,12 +16,12 @@ const bull = (
   </Box>
 );
 
-export default function Card({key,title,desc,price,foodPacket}:any) {
+export default function Card({key,title,desc,price,foodPacket,forCart}:any) {
 
   const dispatch = useAppDispatch()
 
   return (
-    <MUICard sx={{ backgroundColor:"gold"}} key={key}>
+    <MUICard sx={{ backgroundColor:"#F5F5DC"}} key={key}>
       <CardContent>
 
         <Typography variant="h5" component="div">
@@ -37,16 +36,31 @@ export default function Card({key,title,desc,price,foodPacket}:any) {
       </CardContent>
       <CardActions >
         
+
+        {forCart 
         
-        <Button size="small" variant='contained'
+        
+        ? ( <Button size="small" variant='contained' 
+        sx={{backgroundColor:"#FD001C",": hover":{ backgroundColor:"gray" }}}
+        
+        onClick={()=>dispatch(removeFromCart(foodPacket))}
+        
+        >Remove Item</Button>) 
+  
+        
+        : ( <Button size="small" variant='contained' 
+        sx={{backgroundColor:"#FD001C",": hover":{ backgroundColor:"#FD001C" }}}
         
         onClick={()=>dispatch(addToCart(foodPacket))}
         
-        >Add To Cart</Button>
+        >Add To Cart</Button>)}
+        
+       
+
+ 
 
 
-
-        <Typography variant="h6" component="div">
+        <Typography variant="h6" component="div" sx={{color:"#316FF6"}}>
 <strong>${price}</strong>
         </Typography>
       

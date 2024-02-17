@@ -3,17 +3,24 @@ import logo from './logo.svg';
 import './App.css';
 import SignUp from './components/MUI/Signup';
 import LogIn from './components/MUI/Login';
-import {BrowserRouter as Router, Routes, Route}  from 'react-router-dom'
+import {BrowserRouter as Router, Routes, Route, useNavigate, useParams}  from 'react-router-dom'
 import User from './pages/User';
 import RouteProtection from './utils/RouteProtect';
-import { setItemsToStore } from './redux/slices/products';
+import { setCartCount, setItemsToStore, setUserFullName } from './redux/slices/products';
 import { useAppDispatch, useAppSelector } from './redux/hooks';
 import Cart from './pages/Cart';
+import Navbar from './components/Navbar';
+import Pizza from './pages/Pizza';
+import Burgers from './pages/Burgers';
+import Icecream from './pages/Icecream';
 
 function App() {
-  
+
+  const params = useParams();
   const dispatch = useAppDispatch();
-const storeState = useAppSelector( state => state.products);
+  const storeState:any = useAppSelector( state => state.products);
+
+  
 
   useEffect(()=>{
 
@@ -36,17 +43,21 @@ if(cartProducts === null){
 
 }else if (cartProducts !== null){
 
-dispatch(setItemsToStore(cartProducts))
+dispatch(setItemsToStore(cartProducts));
+dispatch(setCartCount(cartProducts?.length));
+
+
 }
   },[])
   
-  console.log(storeState.cartCount)
+
   
   return (
   <>
   
   <Router>
 
+<Navbar  cartCount={storeState?.cartCount} />
 
 <Routes>
 
@@ -56,6 +67,11 @@ dispatch(setItemsToStore(cartProducts))
 <Route path='/' element={<SignUp/>} />
 
 <Route path='/add-to-cart' element={<Cart/>} />
+<Route path='/pizza' element={<Pizza/>} />
+<Route path='/burger' element={<Burgers/>} />
+<Route path='/icecream' element={<Icecream/>} />
+
+
 
 <Route path='/user/:name' element={<RouteProtection><User/></RouteProtection>}/>
 
