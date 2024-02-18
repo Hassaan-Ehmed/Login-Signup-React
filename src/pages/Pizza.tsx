@@ -2,7 +2,7 @@ import React from 'react'
 import { products } from '../data/data'
 import Header from '../components/Header';
 import Products from '../components/Products';
-import fastFood from '../images/fastFood3.jpg'
+import pizzaImage from '../images/pizza1.jpg'
 
 export default function Pizza() {
 
@@ -11,7 +11,7 @@ export default function Pizza() {
   
   return (
     <>
-      <Header heading={"Pizza Items"} img ={fastFood} />
+      <Header heading={"Pizza Items"} img ={pizzaImage} />
 
 <Products foodsArray={pizzas ?? []}/>
     </>

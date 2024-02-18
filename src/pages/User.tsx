@@ -4,7 +4,7 @@ import Products from '../components/Products';
 import { products } from '../data/data';
 import { useAppDispatch } from '../redux/hooks';
 import { setUserFullName } from '../redux/slices/products';
-import fastFood from '../images/fastFood3.jpg'
+import fastFoodImage from '../images/fastFood3.jpg'
 export default function User() {
   
   const params = useParams();
@@ -25,7 +25,7 @@ dispatch(setUserFullName(params?.name as any));
     <>
     
 
-    <Header heading={"Fast Food Items"} img={fastFood}/>
+    <Header heading={"Fast Food Items"} img={fastFoodImage}/>
 
 <Products foodsArray={products} forCart={false}/>
   

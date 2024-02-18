@@ -2,7 +2,7 @@ import React from 'react'
 import { products } from '../data/data'
 import Header from '../components/Header';
 import Products from '../components/Products';
-import fastFood from '../images/fastFood3.jpg'
+import icecreamImage from '../images/icecream3.jpg'
 
 export default function Icecream() {
 
@@ -11,7 +11,7 @@ export default function Icecream() {
   
   return (
     <>
-      <Header heading={"Icecream Items"} img ={fastFood} />
+      <Header heading={"Icecream Items"} img ={icecreamImage} />
 
 <Products foodsArray={icecreams ?? []}/>
     </>

@@ -30,7 +30,7 @@ const navigate = useNavigate();
 
   
 
-  const navPacket = [{navName:'All Foods',navLink:`/user/${storeState.userFullName}`}, {navName:'Pizza',navLink:"/pizza"}, {navName:'Burgers',navLink:"/burger"},{navName:'Icecream',navLink:"/icecream"}];
+  const navPacket = [{navName:'All Foods',navLink:`/user/${storeState.userFullName}`}, {navName:'Pizza',navLink:"/pizza"}, {navName:'Burger',navLink:"/burger"},{navName:'Icecream',navLink:"/icecream"}];
 
 
 
@@ -69,7 +69,7 @@ const navigate = useNavigate();
   <>
   
   {
-    ((location.pathname !== "/login") && (location.pathname !== '/signup') ) && (
+    ((location.pathname !== "/login") && (location.pathname !== '/signup') && (location.pathname !== '/') ) && (
 
       <AppBar position="static" sx={{backgroundColor:"#004225",position:"sticky", top:0,zIndex:99999}}>
       <Container maxWidth="xl">
