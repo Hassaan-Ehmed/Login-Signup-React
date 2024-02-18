@@ -48,7 +48,7 @@ const total:any = storeState?.cartItems?.reduce((acc:any,currentVal:any)=>  acc 
 {storeState.cartItems.length < 1 ? (
 
 
-<div style={{width:"100%",height:"auto",backgroundColor:"#F5F5DC",display:"flex",justifyContent:"center",alignItems:'center'}}>
+<div style={{width:"100%",height:"auto",display:"flex",justifyContent:"center",alignItems:'center'}}>
 
 <img src={emptyCartImage} style={{width:'50%'}}/>
 
