@@ -103,5 +103,3 @@ export const products = [
     // Add more products as needed...
   ];
   
-  console.log(products);
-  
