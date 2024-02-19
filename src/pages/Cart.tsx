@@ -2,7 +2,7 @@ import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 import { styled } from '@mui/material/styles';
-import Card from '../components/MUI/Card';
+import CartCard from '../components/MUI/CartCard';
 import { useAppSelector } from '../redux/hooks';
 import emptyCartImage from '../images/empty-cart.png'
 import { useState } from 'react';
@@ -33,11 +33,12 @@ const storeState:any = useAppSelector(state => state.products);
 
 const url = window.location.pathname; 
 
-const total:any = storeState?.cartItems?.reduce((acc:any,currentVal:any)=>  acc + currentVal?.price ?? 0 ,0);
+let total:any = storeState?.cartItems?.reduce((acc:any,currentVal:any)=> acc + (currentVal.price * currentVal.quantity) ?? 0 ,0);
+
+// total = total * storeState
 
 
-
-    return (
+return (
     <div style={{width:"100%",display:'flex',flexDirection:"column",justifyContent:"center"}}>
 
  <div style={{width:"100%",display:"flex",justifyContent:"center",alignItems:"center",backgroundColor:"#FFCD9B",marginBottom:"10px"}}>
@@ -72,7 +73,7 @@ const total:any = storeState?.cartItems?.reduce((acc:any,currentVal:any)=>  acc 
      {storeState?.cartItems?.map((item:any,index:number)=>(
       <Grid item xs={12}>
 
-       <Card forCart={true} key={item.id} title={item.title} desc={item.desc} price={item.price} foodPacket={item}/>
+       <CartCard  forCart={true} key={item.id} indexNum={index}  foodPacket={item}/>
     
       </Grid>
        ))}
