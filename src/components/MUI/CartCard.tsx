@@ -21,7 +21,7 @@ import {
   warningNotification,
 } from "../../utils/Notifications";
 import { useState } from "react";
-import Counter from "../Counter";
+
 
 const bull = (
   <Box
@@ -35,10 +35,6 @@ const bull = (
 export default function CartCard({
   key,
   indexNum,
-  quantity,
-  title,
-  desc,
-  price,
   foodPacket,
   forCart,
 }: any) {
@@ -62,26 +58,28 @@ export default function CartCard({
       transitionName: transitionName,
     });
 
-  const handleItemAdded = (foodPacket: any,id:number) => {
  
-    dispatch(addToCart(foodPacket));
 
-    // this success/warning msg have some conditons so i moved it to store in  addToCart  go store and check it
-  };
-  const handleDecreaseQuanitity = (foodPacket: any) => {
-    
-
-    if(foodPacket.quantity > 1){
-
-      dispatch(decreaseItemQuantity(foodPacket))
-    }
+    const handleItemAdded = (foodPacket: any) => {
+ 
+      dispatch(addToCart(foodPacket));
   
-  };
+      // this success/warning msg have some conditons so i moved it to store in  addToCart  go store and check it
+    };
 
+
+    const handleDecreaseQuanitity = (foodPacket: any) => {  
+  
+      if(foodPacket.quantity > 1){
+  
+        dispatch(decreaseItemQuantity(foodPacket))
+      }
+    
+    };
   function handleItemRemoved(foodPacket: any) {
     dispatch(removeFromCart(foodPacket));
 
-    errorNotify({
+    successNotification({
       msg: "Item removed successfully !",
       position: "bottom-right",
       time: 500,
@@ -96,7 +94,7 @@ export default function CartCard({
        {forCart ? (<Typography variant="h5" component="div" 
         
         sx={{display:"flex",justifyContent:"space-between",alignItems:"center"}}>
-          {title}
+          {foodPacket.title}
         
         <CloseIcon onClick={() => handleItemRemoved(foodPacket)} sx={{cursor:"pointer"}}/>
         </Typography>) : (<Typography variant="h5" component="div"> 
@@ -108,7 +106,7 @@ export default function CartCard({
           variant="body2"
           sx={{ width: "100%", textOverflow: "ellipsis" }}
         >
-          {desc}
+          {foodPacket.desc}
           <br />
           {'"a benevolent smile"'}
         </Typography>
@@ -117,26 +115,49 @@ export default function CartCard({
 
           <>
 
-          {/* <Button
-          size="small"
-          variant="contained"
-            sx={{
-              backgroundColor: "#FD001C",
-              ": hover": { backgroundColor: "#FD001C" },
-            }}
-            onClick={() => handleItemAdded(foodPacket,indexNum)}
-          >
-            Add To Cart
-          </Button> */}
+       
 
-<Counter quantity={foodPacket.quantity} />
+          <ButtonGroup variant="contained" aria-label="Basic button group">
+    <Button
+    
+    disabled = {foodPacket.quantity < 2 ? true : false}
+    
+    sx={{
+           backgroundColor: "#FD001C",
+           border:"none",
+           ": hover": { backgroundColor: "#FD001C",border:"none" }
+         }}
+         
+         
+         onClick={() => handleDecreaseQuanitity(foodPacket)}
+         
+         >–</Button>
+
+    <Button variant="outlined"  sx={{color:"black",border:"none",":hover ":{border:"none"} , background:"transparent",outline:"none"}}
+    
+    >
+
+{foodPacket.quantity}
+
+    </Button>
+    <Button sx={{
+           backgroundColor: "#FD001C",
+           border:"none",
+           ": hover": { backgroundColor: "#FD001C",border:"none" },
+         }}
+         
+         
+         onClick={() => handleItemAdded(foodPacket)}
+         
+         >+</Button>
+  </ButtonGroup>
 
           </>
        
 
 
         <Typography variant="h6" component="div" sx={{ color: "#316FF6" }}>
-          <strong>${price}</strong>
+          <strong>${foodPacket.price}</strong>
         </Typography>
       </CardActions>
     </MUICard>

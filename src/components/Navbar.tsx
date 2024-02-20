@@ -35,7 +35,7 @@ function Navbar({ cartCount }: any) {
   const [fullName, setFullName] = React.useState<string>("");
 
   const navPacket = [
-    { navName: "All Foods", navLink: `/user/${storeState.userFullName}` },
+    { navName: "All Foods", navLink: `/all-foods` },
     { navName: "Pizza", navLink: "/pizza" },
     { navName: "Burger", navLink: "/burger" },
     { navName: "Icecream", navLink: "/icecream" },
@@ -88,7 +88,7 @@ function Navbar({ cartCount }: any) {
     <>
       {location.pathname !== "/login" &&
         location.pathname !== "/signup" &&
-        location.pathname !== "/" && (
+        location.pathname !== "/"  && (
           <AppBar
             position="static"
             sx={{
@@ -124,7 +124,7 @@ function Navbar({ cartCount }: any) {
                   }}
                 >
                   <Link
-                    to={`/user/${storeState.userFullName}`}
+                    to={`/all-foods`}
                     style={{ textDecoration: "none", color: "white" }}
                   >
                     Foods
@@ -217,12 +217,12 @@ function Navbar({ cartCount }: any) {
                               style={{
                                 color: "black",
                                 backgroundColor: "#FFAC00",
-                                fontSize: "1.1vw",
-                                padding: "2.2px",
-                                borderRadius: "50%",
+                                fontSize: "0.8vw",
+                                padding: "2px",
+                                borderRadius: "10%",
                               }}
                             >
-                              {cartCount}
+                              {cartCount >= 100 ? "99+" : cartCount }
                             </span>
                           }
                         >

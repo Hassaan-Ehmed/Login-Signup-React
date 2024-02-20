@@ -7,7 +7,6 @@ import {
 import { Bounce } from "react-toastify";
 import { products } from "../../../data/data";
 
-
 const successNotify = ({
   msg,
   position,
@@ -39,25 +38,24 @@ const productSlice: any = createSlice({
     cartCount: 0,
     cartItems: [],
     userFullName: "",
+    productData: products,
   },
   name: "productSlice",
   reducers: {
 
 
+    
     addToCart: (state: any, action: any) => {
       let cartProducts = JSON.parse(
         localStorage.getItem("cartProducts") as string
       );
 
       const isItemExsist = cartProducts.find(
-        (item: any, i: number) => item?.title === action?.payload?.title
+        (item: any) => item?.id === action?.payload?.id
       );
 
       if (!isItemExsist) {
-
-        
-        let newObj = {...action?.payload}
-
+        let newObj = { ...action?.payload };
 
         newObj.quantity = action.payload.quantity + 1;
 
@@ -67,8 +65,6 @@ const productSlice: any = createSlice({
           time: 500,
           transitionName: Bounce,
         });
-        
-        state.permissionToAdd = true;
 
         let temp_arr = cartProducts;
 
@@ -76,30 +72,53 @@ const productSlice: any = createSlice({
 
         state.cartItems = temp_arr;
 
-        state.cartCount = temp_arr.reduce((a:any,b:any)=> a + b.quantity ,0);
+        state.cartCount = temp_arr.reduce(
+          (a: any, b: any) => a + b.quantity,
+          0
+        );
 
         localStorage.setItem("cartProducts", JSON.stringify(temp_arr));
+
+        // let findIndex = state.productData.findIndex(
+        //   (item: any) => item.id === action.payload.id
+        // );
+
+        // let copyProductData = [...state.productData];
+
+        // copyProductData[findIndex] = newObj;
+
+        // console.log(copyProductData[findIndex]);
+
+        // state.productData = copyProductData;
+
+        // console.log("AFTER SET");
       } else {
-        
+        let IncreaseExsisting = isItemExsist;
 
-         let IncreaseExsisting = isItemExsist
+        IncreaseExsisting.quantity = IncreaseExsisting.quantity + 1;
 
-         IncreaseExsisting.quantity =  IncreaseExsisting.quantity + 1 
+        cartProducts[action.payload] = IncreaseExsisting;
 
-         cartProducts[action.payload] = IncreaseExsisting
-        
-         state.cartItems = cartProducts;
-         state.cartCount = cartProducts.reduce((a:any,b:any)=> a + b.quantity ,0);
+        state.cartItems = cartProducts;
+        state.cartCount = cartProducts.reduce(
+          (a: any, b: any) => a + b.quantity ?? 0,
+          0
+        );
 
-         localStorage.setItem("cartProducts", JSON.stringify(cartProducts));
+        localStorage.setItem("cartProducts", JSON.stringify(cartProducts));
 
+        // let findIndex = state.productData.findIndex(
+        //   (item: any) => item.id === action.payload.id
+        // );
 
-      
+        // let copyProductData = [...state.productData];
 
+        // copyProductData[findIndex] = IncreaseExsisting;
+
+        // state.productData = copyProductData;
       }
     },
 
-  
     removeFromCart: (state: any, action) => {
       let cartProducts = JSON.parse(
         localStorage.getItem("cartProducts") as string
@@ -117,39 +136,89 @@ const productSlice: any = createSlice({
       });
 
       state.cartItems = filteredArr;
-      state.cartCount = filteredArr.length;
+      state.cartCount = filteredArr.reduce(
+        (a: any, b: any) => a + b.quantity,
+        0
+      );
+      // state.cartCount = filteredArr.length;
 
       localStorage.setItem("cartProducts", JSON.stringify(filteredArr));
+
+
+      // -- END REMOVE CODE -- //
+      // let filteredRemovedItem = cartProducts.filter(
+      //   (item: any) => item.id === action.payload.id
+      // );
+
+      // let targetedItem = state.productData.find(
+      //   (item: any) => item.id === filteredRemovedItem.id
+      // );
+
+      // let resetItem = {
+      //   ...targetedItem,
+      //   quantity: 0,
+      // };
+
+      // let copyProductData = [...state.productData];
+
+      // let indexOfItem = state.productData.findIndex(
+      //   (item: any) => item.id === filteredRemovedItem.id
+      // );
+
+      // copyProductData[indexOfItem] = resetItem;
+
+      // state.productData = copyProductData;
+
+      // let copyProductData = filteredArr.reduce((a:any,b:any)=> a + b.quantity ,0);
+
+      //   copyProductData[findRemovedItem] = {
+
+      //     ...copyProductData[findRemovedItem],
+
+      //     quantity:findRemovedItem.quantity
+
+      //  state.productData = copyProductData
     },
 
-  
-  decreaseItemQuantity : (state:any,action:any)=>{
-    let cartProducts = JSON.parse(
-      localStorage.getItem("cartProducts") as string
-    );
+    decreaseItemQuantity: (state: any, action: any) => {
+      let cartProducts = JSON.parse(
+        localStorage.getItem("cartProducts") as string
+      );
 
-    const isItemExsist = cartProducts.find(
-      (item: any, i: number) => item?.title === action?.payload?.title
-    );
+      const isItemExsist = cartProducts.find(
+        (item: any, i: number) => item?.id === action?.payload?.id
+      );
 
-    if(isItemExsist){
+      let IncreaseExsisting = isItemExsist;
 
- 
-    let IncreaseExsisting = isItemExsist
+      IncreaseExsisting.quantity = IncreaseExsisting.quantity - 1;
 
-    IncreaseExsisting.quantity =  IncreaseExsisting.quantity - 1 
+      cartProducts[action.payload] = IncreaseExsisting;
 
-    cartProducts[action.payload] = IncreaseExsisting
-   
-    state.cartItems = cartProducts;
+      state.cartItems = cartProducts;
 
-    state.cartCount = cartProducts.reduce((a:any,b:any)=> a + b.quantity ,0);
+      state.cartCount = cartProducts.reduce(
+        (a: any, b: any) => a + b.quantity,
+        0
+      );
 
-    localStorage.setItem("cartProducts", JSON.stringify(cartProducts));
+      localStorage.setItem("cartProducts", JSON.stringify(cartProducts));
 
-  }
-  },
-  
+      // let findIndex = state.productData.findIndex(
+      //   (item: any) => item.id === action.payload.id
+      // );
+
+      // console.log("inProductDec", findIndex);
+
+      // let copyProductData = [...state.productData];
+
+      // copyProductData[findIndex] = IncreaseExsisting;
+
+      // console.log("DECREASE...", copyProductData[findIndex]);
+
+      // state.productData = copyProductData;
+    },
+
     setItemsToStore: (state: any, action: any) => {
       state.cartItems = action?.payload;
       state.cartCount = action?.payload?.length;
@@ -173,5 +242,5 @@ export const {
   setUserFullName,
   setCartCount,
   removeFromCart,
-  decreaseItemQuantity
+  decreaseItemQuantity,
 } = productSlice.actions;

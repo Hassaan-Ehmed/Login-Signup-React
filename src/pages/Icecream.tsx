@@ -1,19 +1,21 @@
-import React from 'react'
-import { products } from '../data/data'
-import Header from '../components/Header';
-import Products from '../components/Products';
-import icecreamImage from '../images/icecream3.jpg'
+import React, { useEffect, useState } from "react";
+import { products } from "../data/data";
+import Header from "../components/Header";
+import Products from "../components/Products";
+import icecreamImage from "../images/icecream3.jpg";
+import { useAppSelector } from "../redux/hooks";
 
 export default function Icecream() {
+  const storeState: any = useAppSelector((state) => state.products);
 
+  let icecreams: any = storeState?.productData.filter(
+    (item: any) => item.category === "Icecream"
+  );
 
-  const icecreams:any = products.filter((item:any)=> item.category === "Icecream");
-  
   return (
     <>
-      <Header heading={"Icecream Items"} img ={icecreamImage} />
-
-<Products foodsArray={icecreams ?? []}/>
+      <Header heading={"Icecream Items"} img={icecreamImage} />
+      <Products foodsArray={icecreams ?? []} />
     </>
-  )
+  );
 }

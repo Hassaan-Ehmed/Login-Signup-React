@@ -4,7 +4,7 @@ import Paper from "@mui/material/Paper";
 import { styled } from "@mui/material/styles";
 import ProductCard from "./MUI/ProductCard";
 import { useParams } from "react-router-dom";
-
+import { useAppSelector } from "../redux/hooks";
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -15,6 +15,8 @@ const Item = styled(Paper)(({ theme }) => ({
 }));
 
 export default function Products({ foodsArray, forCart }: any) {
+  const storeState: any = useAppSelector((state) => state.products);
+
   const food: any = foodsArray;
 
   const params = useParams();
@@ -23,16 +25,13 @@ export default function Products({ foodsArray, forCart }: any) {
     <Box sx={{ flexGrow: 1 }}>
       <Grid container spacing={1}>
         <Grid container item spacing={2}>
-          {food.map((item: any, index: number) => (
+          {foodsArray?.map((item: any, index: number) => (
             <Grid item xs={3}>
               <ProductCard
-                key={item.id}
-                indexNum = {index}
-                quantity={item?.quantity}
-                title={item.title}
-                desc={item.desc}
-                price={item.price}
+                key={storeState?.productData}
+                indexNum={index}
                 foodPacket={item}
+                quantity={item.quantity}
                 forCart={forCart}
               />
             </Grid>

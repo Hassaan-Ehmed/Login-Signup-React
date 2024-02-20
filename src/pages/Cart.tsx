@@ -35,8 +35,7 @@ const url = window.location.pathname;
 
 let total:any = storeState?.cartItems?.reduce((acc:any,currentVal:any)=> acc + (currentVal.price * currentVal.quantity) ?? 0 ,0);
 
-// total = total * storeState
-
+total = new Intl.NumberFormat("en-US").format(total);
 
 return (
     <div style={{width:"100%",display:'flex',flexDirection:"column",justifyContent:"center"}}>
@@ -70,13 +69,14 @@ return (
         <Grid container spacing={1}>
 
           <Grid container item spacing={2}>
-     {storeState?.cartItems?.map((item:any,index:number)=>(
-      <Grid item xs={12}>
+     {storeState?.cartItems?.map((item:any,index:number)=>       item.quantity  > 0  ? 
+       (
+       <Grid item xs={12}>
 
        <CartCard  forCart={true} key={item.id} indexNum={index}  foodPacket={item}/>
     
-      </Grid>
-       ))}
+      </Grid>) : ("")
+)}
          
       </Grid>
         </Grid>
@@ -95,6 +95,8 @@ flexDirection:"column",justifyContent:"space-between",alignItems:"center",overfl
 
 
 <TotalDiv text={"Total Items:"} numbers={storeState?.cartItems.length}/>
+
+
 <TotalDiv text={"Total Price:"} numbers={total}/>
 
 

@@ -217,7 +217,7 @@ export default function SignUp() {
       !state.passwordError &&
       !state.cityError
     ) {
-      if (state?.email && state?.password) {
+      if (state?.email && state?.password && state.uName) {
         let userInfoBox = JSON.parse(
           localStorage.getItem("userInfoBox" || "[]") as string
         );
@@ -225,73 +225,88 @@ export default function SignUp() {
         const isEmailExsist = userInfoBox.find(
           (userPacket: any) => userPacket.emailData === state.email
         );
+        const isUserNameExsist = userInfoBox.find(
+          (userPacket: any) => userPacket.uNameData === state.uName
+        );
+        
 
-        if (!isEmailExsist) {
-          const isPasswordExsist = userInfoBox.find(
-            (userPacket: any) => userPacket.passwordData === state.password
-          );
 
-          if (!isPasswordExsist) {
-            setUserInfo((prevState) => ({
-              ...prevState,
-              fNameData: state?.fName,
-              lNameData: state?.lName,
-              uNameData: state?.uName,
-              emailData: state?.email,
-              passwordData: state?.password,
-              cityData: state?.city,
-              dateData: state?.date,
-            }));
+if(!isUserNameExsist){
 
-            setDataReady(true);
+  if (!isEmailExsist) {
+    
+    const isPasswordExsist = userInfoBox.find(
+      (userPacket: any) => userPacket.passwordData === state.password
+    );
 
-            setState({
-              fName: "",
-              lName: "",
-              uName: "",
-              email: "",
-              password: "",
-              city: "",
-              date: "2012-07-19",
 
-              fNameCheck: false,
-              lNameCheck: false,
-              uNameCheck: false,
-              emailCheck: false,
-              passwordCheck: false,
-              cityCheck: false,
-            });
+      setUserInfo((prevState) => ({
+        ...prevState,
+        fNameData: state?.fName,
+        lNameData: state?.lName,
+        uNameData: state?.uName,
+        emailData: state?.email,
+        passwordData: state?.password,
+        cityData: state?.city,
+        dateData: state?.date,
+      }));
 
-            successNotify({
-              msg: "Account Created Successfully !",
-              position: "top-right",
-              time: 1100,
-              transitionName: Bounce,
-            });
+      setDataReady(true);
 
-            setTimeout(() => {
-              navigate("/login");
-            }, 2200);
-          } else {
-            warningNotify({
-              msg: "This password is already taken!",
-              position: "top-right",
-              time: 1200,
-              transitionName: Zoom,
-            });
-          }
-        } else {
-          warningNotify({
-            msg: "This email already exsist!",
-            position: "top-right",
-            time: 1200,
-            transitionName: Zoom,
-          });
-        }
+      setState({
+        fName: "",
+        lName: "",
+        uName: "",
+        email: "",
+        password: "",
+        city: "",
+        date: "2012-07-19",
+
+        fNameCheck: false,
+        lNameCheck: false,
+        uNameCheck: false,
+        emailCheck: false,
+        passwordCheck: false,
+        cityCheck: false,
+      });
+
+      successNotify({
+        msg: "Account created successfully !",
+        position: "top-right",
+        time: 1100,
+        transitionName: Bounce,
+      });
+
+      setTimeout(() => {
+        navigate("/login");
+      }, 2200);
+    
+ 
+  } else {
+    warningNotify({
+      msg: "This email already exsist!",
+      position: "top-right",
+      time: 1200,
+      transitionName: Zoom,
+    });
+  }
+
+
+
+
+}else{
+  errorNotify({
+    msg: "This username already taken!",
+    position: "top-right",
+    time: 2000,
+    transitionName: Bounce,
+  });
+}
+
       }
     } else {
       errorNotify({
-        msg: "Please Fill Proper Form!",
+        msg: "Please fill proper form!",
         position: "top-right",
         time: 2000,
         transitionName: Bounce,
@@ -326,16 +341,15 @@ export default function SignUp() {
             <Grid container spacing={2}>
               <Grid item xs={12} sm={6}>
                 <TextField
-                  value={state?.fName ?? "---"}
+                  value={state?.fName ?? ""}
                   autoComplete="given-name"
                   name="firstName"
                   required
                   fullWidth
                   id="firstName"
                   error={state?.fNameError ? true : false}
-                  label={
-                    state?.fNameError ? "only characters allowed" : "First Name"
-                  }
+                  label="First Name"
+                  helperText={ state?.fNameError ? "only characters allowed" :  ""}
                   autoFocus
                   onChange={(e) => {
                     setState({ fName: e?.target?.value });
@@ -345,16 +359,15 @@ export default function SignUp() {
               </Grid>
               <Grid item xs={12} sm={6}>
                 <TextField
-                  value={state?.lName ?? "---"}
+                  value={state?.lName ?? ""}
                   required
                   fullWidth
                   id="lastName"
                   error={state?.lNameError ? true : false}
-                  label={
-                    state?.lNameError ? "only characters allowed" : "Last Name"
-                  }
+                  label="Last Name"
                   name="lastName"
                   autoComplete="family-name"
+                  helperText={ state?.lNameError ? "only characters allowed" :  ""}
                   onChange={(e) => {
                     setState({ lName: e?.target?.value });
                     setState({ lNameCheck: true });
@@ -363,18 +376,15 @@ export default function SignUp() {
               </Grid>
               <Grid item xs={12}>
                 <TextField
-                  value={state?.uName ?? "---"}
+                  value={state?.uName ?? ""}
                   required
                   fullWidth
                   id="username"
                   error={state?.uNameError ? true : false}
-                  label={
-                    state?.uNameError
-                      ? "username must be lowercase & numbers"
-                      : "User Name"
-                  }
+                  label="User Name"
                   name="username"
                   autoComplete="username"
+                   helperText={ state?.uNameError ? "username must be lowercase & numbers" :  ""}
                   onChange={(e) => {
                     setState({ uName: e?.target?.value });
                     setState({ uNameCheck: true });
@@ -383,16 +393,15 @@ export default function SignUp() {
               </Grid>
               <Grid item xs={12}>
                 <TextField
-                  value={state?.email ?? "---"}
+                  value={state?.email ?? ""}
                   required
                   fullWidth
                   id="email"
                   error={state?.emailError ? true : false}
-                  label={
-                    state?.emailError ? "incorrect email pattern" : "Email"
-                  }
+                  label="Email"
                   name="email"
                   autoComplete="email"
+                  helperText={ state?.emailError ? "incorrect email pattern" :  ""}
                   onChange={(e) => {
                     setState({ email: e?.target?.value });
                     setState({ emailCheck: true });
@@ -401,17 +410,16 @@ export default function SignUp() {
               </Grid>
               <Grid item xs={12}>
                 <TextField
-                  value={state?.password ?? "---"}
+                  value={state?.password ?? ""}
                   required
                   fullWidth
                   name="password"
                   error={state?.passwordError ? true : false}
-                  label={
-                    state?.passwordError ? "minimum 8 characters" : "Password"
-                  }
+                  label="Password"
                   type="password"
                   id="password"
                   autoComplete="new-password"
+                  helperText={ state?.passwordError ? "minimum 8 characters allowed" :  ""}
                   onChange={(e) => {
                     setState({ password: e?.target?.value });
                     setState({ passwordCheck: true });
@@ -421,13 +429,14 @@ export default function SignUp() {
 
               <Grid item xs={12} sm={6}>
                 <TextField
-                  value={state?.city ?? "---"}
+                  value={state?.city ?? ""}
                   name="city"
                   required
                   fullWidth
                   id="city"
                   error={state?.cityError ? true : false}
-                  label={state?.cityError ? "Invalid City" : "City"}
+                  label="City"
+                  helperText={ state?.cityError ? "invalid city" :  ""}
                   onChange={(e) => {
                     setState({ city: e?.target?.value });
                     setState({ cityCheck: true });
@@ -436,16 +445,32 @@ export default function SignUp() {
               </Grid>
 
               <Grid item xs={12} sm={6} sx={{ position: "relative" }}>
+                <label 
+                
+                style={{
+                  backgroundColor:"white",
+                  position:"absolute",
+                  zIndex:2,
+                  top:"7px",
+                  left:"26px",
+                  fontSize:"1.3vh",
+                  color:"gray"
+
+              }}
+                
+                
+                >Birth Date</label>
                 <input
                   type="date"
                   value={state?.date}
                   min="1960-01-01"
-                  max="2020-12-31"
+                  max={`${new Date().getFullYear()-4}-12-31`}
                   style={{
                     width: "100%",
                     height: "100%",
                     cursor: "pointer",
                     borderRadius: "5px",
+                    position:"relative",
                     border: state?.dateError
                       ? "1px solid red"
                       : "1px solid #bcbaba",

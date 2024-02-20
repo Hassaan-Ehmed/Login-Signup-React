@@ -113,7 +113,7 @@ export default function LogIn() {
 
           setTimeout(() => {
             navigate(
-              `/user/${user.fNameData.toLowerCase()}-${user.lNameData.toLowerCase()}`
+              `/all-foods`
             );
           }, 1800);
         } else {

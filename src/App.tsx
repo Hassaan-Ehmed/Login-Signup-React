@@ -10,7 +10,6 @@ import {
   useNavigate,
   useParams,
 } from "react-router-dom";
-import User from "./pages/User";
 import RouteProtection from "./utils/RouteProtect";
 import {
   setCartCount,
@@ -24,6 +23,8 @@ import Pizza from "./pages/Pizza";
 import Burgers from "./pages/Burgers";
 import Icecream from "./pages/Icecream";
 import Burger from "./pages/Burgers";
+import AllFoods from "./pages/AllFoods";
+import ErrorPage from "./components/ErrorPage";
 
 function App() {
   const params = useParams();
@@ -57,7 +58,9 @@ function App() {
       let currentQuantity = cartProducts.reduce((a:any,b:any)=> a + b.quantity ,0);
       dispatch(setCartCount(currentQuantity));
     }
-  }, []);
+
+    
+  },[]);
 
   return (
     <>
@@ -104,13 +107,16 @@ function App() {
           />
 
           <Route
-            path="/user/:name"
+            path="/all-foods"
             element={
               <RouteProtection>
-                <User />
+                <AllFoods />
               </RouteProtection>
             }
           />
+
+
+          <Route path="*" element={<ErrorPage />} />
         </Routes>
       </Router>
     </>
