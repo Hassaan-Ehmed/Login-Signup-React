@@ -26,6 +26,9 @@ import Burger from "./pages/Burgers";
 import AllFoods from "./pages/AllFoods";
 import ErrorPage from "./pages/ErrorPage";
 import AuthProtection from "./utils/AuthProtection";
+import Noodles from "./pages/Noodles";
+import Salad from "./pages/Salad";
+import Drinks from "./pages/Drinks";
 
 function App() {
   const params = useParams();
@@ -115,6 +118,30 @@ function App() {
             element={
               <RouteProtection>
                 <Icecream />
+              </RouteProtection>
+            }
+          />
+          <Route
+            path="noodles"
+            element={
+              <RouteProtection>
+                <Noodles/>
+              </RouteProtection>
+            }
+          />
+          <Route
+            path="salad"
+            element={
+              <RouteProtection>
+                <Salad />
+              </RouteProtection>
+            }
+          />
+          <Route
+            path="drinks"
+            element={
+              <RouteProtection>
+                <Drinks />
               </RouteProtection>
             }
           />

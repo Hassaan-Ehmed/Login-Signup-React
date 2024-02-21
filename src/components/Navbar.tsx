@@ -38,7 +38,10 @@ function Navbar({ cartCount }: any) {
     { navName: "All Foods", navLink: `/` },
     { navName: "Pizza", navLink: "/pizza" },
     { navName: "Burger", navLink: "/burger" },
+    { navName: "Noodles", navLink: "/noodles" },
+    { navName: "Salad", navLink: "/salad" },
     { navName: "Icecream", navLink: "/icecream" },
+    { navName: "Drinks", navLink: "/drinks" }
   ];
 
   const successNotify = ({

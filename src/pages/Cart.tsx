@@ -135,7 +135,7 @@ onClick={handleRemoveAllItems}
 </div>
 
 
-<div style={{maxWidth:'15%',height:"72vh",backgroundColor:"blue",display:"flex",
+<div style={{maxWidth:'15%',height:"72vh",backgroundColor:"#1B4226",display:"flex",
 flexDirection:"column",justifyContent:"space-between",alignItems:"center",overflowY:"hidden",boxShadow:"black -2px 7px 12px -7px; ",position:'fixed',right:0}} >
 
 
