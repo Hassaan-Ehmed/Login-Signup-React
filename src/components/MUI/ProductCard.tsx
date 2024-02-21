@@ -1,4 +1,4 @@
-import { Card as MUICard } from "@mui/material";
+import { Grid, Card as MUICard } from "@mui/material";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import CardActions from "@mui/material/CardActions";
@@ -49,55 +49,58 @@ export default function ProductCard({
   useEffect(() => {
     let cartProducts = JSON.parse(
       localStorage.getItem("cartProducts") as string
-    );
+    ) ?? []
 
-    const isPresent = cartProducts.filter((i: any) => i.id === foodPacket.id);
+    const isPresent = cartProducts.filter((i: any) => i?.id === foodPacket?.id);
     if (isPresent?.length > 0) {
       setItemPresent(true);
     }
     setQuantity(isPresent[0]?.quantity ?? 0);
-    
 
 
-    // }
-  }, [storeState?.cartItems]);
+}, [storeState?.cartItems]);
+
+
+
 
   // console.log("PRODUCT QUANTITY::::",foodPacket.quantity);
 
-  const errorNotify = ({
-    msg,
-    position,
-    time,
-    transitionName,
-  }: notificationTypes) =>
-    errorNotification({
-      msg: msg,
-      position: position,
-      time: time,
-      transitionName: transitionName,
-    });
 
   const handleItemAdded = (foodPacket: any) => {
+
+
     dispatch(addToCart(foodPacket));
 
     // this success/warning msg have some conditons so i moved it to store in  addToCart  go store and check it
+
   };
 
   const handleDecreaseQuanitity = (foodPacket: any) => {
+
     if (currentQuantity > 0) {
-      
-      dispatch(decreaseItemQuantity(foodPacket));
-    } else if (foodPacket.quantity) {
-      console.log("Hello......")
-      dispatch(decreaseItemQuantity(foodPacket));
-      removeFromCart(foodPacket);
+
+      if(currentQuantity === 1 ){
+        dispatch(decreaseItemQuantity(foodPacket));
+        dispatch(removeFromCart(foodPacket));
+        successNotification({
+          msg: "Item removed successfully !",
+          position: "bottom-right",
+          time: 500,
+          transitionName: Bounce,
+        });
+        
+      }else{
+        
+        dispatch(decreaseItemQuantity(foodPacket));
+      }
     }
+  
   };
 
   function handleItemRemoved(foodPacket: any) {
     dispatch(removeFromCart(foodPacket));
 
-    errorNotify({
+    successNotification({
       msg: "Item removed successfully !",
       position: "bottom-right",
       time: 500,
@@ -105,12 +108,17 @@ export default function ProductCard({
     });
   }
 
-  console.log("foodPacket", foodPacket);
-  console.log("Current Quantity", currentQuantity);
+  console.log("foodPacket", foodPacket ?? {});
+  console.log("Current Quantity", currentQuantity ?? 0);
 
+
+
+
+  let formatedQuantity  = new Intl.NumberFormat("en-US").format(currentQuantity) ?? 0
   return (
-    <MUICard sx={{ backgroundColor: "#F5F5DC" }} key={key}>
-      <CardContent>
+
+    <MUICard sx={{ backgroundColor: "#F5F5DC",cursor:"pointer"}} key={key}>
+      <CardContent sx={{ maxWidth:'30vw'}}>
         {forCart ? (
           <Typography
             variant="h5"
@@ -121,7 +129,7 @@ export default function ProductCard({
               alignItems: "center",
             }}
           >
-            {foodPacket.title}
+            {foodPacket.title ?? ''}
 
             <CloseIcon
               onClick={() => handleItemRemoved(foodPacket)}
@@ -129,14 +137,29 @@ export default function ProductCard({
             />
           </Typography>
         ) : (
-          <Typography variant="h5" component="div">
-            {foodPacket.title}
+          <Typography variant="h5" component="div" sx={{backgroundColor:""}}>
+            {foodPacket.title ?? ''}
           </Typography>
         )}
 
         <Typography
           variant="body2"
-          sx={{ width: "100%", textOverflow: "ellipsis" }}
+          sx={{ 
+            // backgroundColor:"red",
+            textOverflow: "ellipsis",
+            overflow:"hidden",
+            whiteSpace:"nowrap",
+            wordWrap:"normal",
+            ":hover ":{
+              textOverflow: "",
+              overflow:"visible",
+              whiteSpace:"normal",
+              wordWrap:"break-word"
+
+
+            }
+       
+           }}
         >
           {foodPacket.desc}
           <br />
@@ -147,61 +170,79 @@ export default function ProductCard({
         <>
           {((!itemPresent) || (currentQuantity < 1)) ? (
             <Button
-              size="small"
+              size={'small'}
               variant="contained"
               sx={{
                 backgroundColor: "#FD001C",
+                padding:"7px 10px",
                 ": hover": { backgroundColor: "#FD001C" },
+                " .MuiButtonBase-root":{
+                  
+                }
               }}
               onClick={() => handleItemAdded(foodPacket)}
             >
               Add To Cart
             </Button>
           ) : (
-            <ButtonGroup variant="contained" aria-label="Basic button group">
+            <Box
+            sx={{
+              display: 'flex',
+              justifyContent:"flex-start",
+              alignItems:"center",
+            
+            }}
+          >
+            <ButtonGroup variant="outlined"  >
               <Button
-                // disabled = {foodPacket.quantity < 2 ? true : false}
-
                 sx={{
+                  
                   backgroundColor: "#FD001C",
                   border: "none",
-                  ": hover": { backgroundColor: "#FD001C", border: "none" },
+                  color:"white",
+                  ":hover ": { backgroundColor: "#FD001C", border: "none" ,},
                 }}
                 onClick={() => handleDecreaseQuanitity(foodPacket)}
               >
-                –
+                -
               </Button>
-
               <Button
                 variant="outlined"
                 sx={{
                   color: "black",
-                  border: "none",
-                  ":hover ": { border: "none" },
-                  background: "transparent",
+                  ":hover ": { border:"0.5px solid #c9c9c9" },
+                  border:"0.5px solid #c9c9c9",
                   outline: "none",
                 }}
               >
-                {currentQuantity}
+                {formatedQuantity ?? 0}
               </Button>
               <Button
                 sx={{
                   backgroundColor: "#FD001C",
                   border: "none",
-                  ": hover": { backgroundColor: "#FD001C", border: "none" },
+                  marginLeft:"30px",
+                  color:"white",
+                  
+
+                  ":hover ": { backgroundColor: "#FD001C", border: "none" },
                 }}
                 onClick={() => handleItemAdded(foodPacket)}
               >
                 +
               </Button>
             </ButtonGroup>
+          
+            </Box>
           )}
         </>
 
         <Typography variant="h6" component="div" sx={{ color: "#316FF6" }}>
-          <strong>${foodPacket.price}</strong>
+          <strong>${foodPacket.price ?? 0}</strong>
         </Typography>
       </CardActions>
-    </MUICard>
-  );
+    </MUICard> 
+    
+
+);
 }

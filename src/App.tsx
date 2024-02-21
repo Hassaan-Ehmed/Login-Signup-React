@@ -24,7 +24,8 @@ import Burgers from "./pages/Burgers";
 import Icecream from "./pages/Icecream";
 import Burger from "./pages/Burgers";
 import AllFoods from "./pages/AllFoods";
-import ErrorPage from "./components/ErrorPage";
+import ErrorPage from "./pages/ErrorPage";
+import AuthProtection from "./utils/AuthProtection";
 
 function App() {
   const params = useParams();
@@ -32,16 +33,16 @@ function App() {
   const storeState: any = useAppSelector((state) => state.products);
 
   useEffect(() => {
-    let isToken = JSON.parse(localStorage.getItem("userToken") as string);
+    let isToken = JSON.parse(localStorage.getItem("userToken") as string) ?? ''
 
     if (isToken === null) {
       localStorage.setItem("userToken", JSON.stringify(""));
     } else {
       if (isToken) {
-        let userFullName = isToken.split("-");
+        let userFullName = isToken?.split("-");
         dispatch(
           setUserFullName(
-            `${userFullName[0].toLowerCase()}-${userFullName[1].toLowerCase()}`
+            `${userFullName[0]?.toLowerCase()}-${userFullName[1]?.toLowerCase()}`
           )
         );
       }
@@ -49,7 +50,7 @@ function App() {
 
     let cartProducts = JSON.parse(
       localStorage.getItem("cartProducts") as string
-    );
+    ) ?? []
 
     if (cartProducts === null) {
       localStorage.setItem("cartProducts", JSON.stringify([]));
@@ -65,49 +66,19 @@ function App() {
   return (
     <>
       <Router>
-        <Navbar cartCount={storeState?.cartCount} />
 
         <Routes>
-          <Route path="/signup" element={<SignUp />} />
+        
+        
+<Route path="/signup" element={<AuthProtection><SignUp /></AuthProtection>} />
 
-          <Route path="/login" element={<LogIn />} />
-          <Route path="/" element={<SignUp />} />
+<Route path="/login" element={<AuthProtection><LogIn /></AuthProtection>} />
 
-          <Route
-            path="/add-to-cart"
-            element={
-              <RouteProtection>
-                <Cart />
-              </RouteProtection>
-            }
-          />
-          <Route
-            path="/pizza"
-            element={
-              <RouteProtection>
-                <Pizza />
-              </RouteProtection>
-            }
-          />
-          <Route
-            path="/burger"
-            element={
-              <RouteProtection>
-                <Burger />
-              </RouteProtection>
-            }
-          />
-          <Route
-            path="/icecream"
-            element={
-              <RouteProtection>
-                <Icecream />
-              </RouteProtection>
-            }
-          />
+        <Route path="/" element={<Navbar cartCount={storeState?.cartCount} />}>
+        
 
           <Route
-            path="/all-foods"
+          index
             element={
               <RouteProtection>
                 <AllFoods />
@@ -115,7 +86,41 @@ function App() {
             }
           />
 
+          <Route
+            path="add-to-cart"
+            element={
+              <RouteProtection>
+                <Cart />
+              </RouteProtection>
+            }
+          />
+          <Route
+            path="pizza"
+            element={
+              <RouteProtection>
+                <Pizza />
+              </RouteProtection>
+            }
+          />
+          <Route
+            path="burger"
+            element={
+              <RouteProtection>
+                <Burger />
+              </RouteProtection>
+            }
+          />
+          <Route
+            path="icecream"
+            element={
+              <RouteProtection>
+                <Icecream />
+              </RouteProtection>
+            }
+          />
 
+
+</Route>
           <Route path="*" element={<ErrorPage />} />
         </Routes>
       </Router>

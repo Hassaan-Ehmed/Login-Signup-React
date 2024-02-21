@@ -113,7 +113,7 @@ export default function LogIn() {
 
           setTimeout(() => {
             navigate(
-              `/all-foods`
+              `/`
             );
           }, 1800);
         } else {

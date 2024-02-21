@@ -45,21 +45,6 @@ export default function CartCard({
   const dispatch = useAppDispatch();
   const storeState: any = useAppSelector((state) => state?.products);
 
-  const errorNotify = ({
-    msg,
-    position,
-    time,
-    transitionName,
-  }: notificationTypes) =>
-    errorNotification({
-      msg: msg,
-      position: position,
-      time: time,
-      transitionName: transitionName,
-    });
-
- 
-
     const handleItemAdded = (foodPacket: any) => {
  
       dispatch(addToCart(foodPacket));
@@ -87,9 +72,10 @@ export default function CartCard({
     });
   }
 
+  let formatedQuantity = new Intl.NumberFormat("en-US").format(foodPacket.quantity);
   return (
-    <MUICard sx={{ backgroundColor: "#F5F5DC" }} key={key}>
-      <CardContent>
+    <MUICard sx={{ backgroundColor: "#F5F5DC",cursor:"pointer" }} key={key}>
+      <CardContent sx={{ maxWidth:'30vw'}}>
       
        {forCart ? (<Typography variant="h5" component="div" 
         
@@ -104,7 +90,20 @@ export default function CartCard({
         
         <Typography
           variant="body2"
-          sx={{ width: "100%", textOverflow: "ellipsis" }}
+          sx={{ 
+            textOverflow: "ellipsis",
+            overflow:"hidden",
+            whiteSpace:"nowrap",
+            wordWrap:"normal",
+            ":hover ":{
+              textOverflow: "",
+              overflow:"visible",
+              whiteSpace:"normal",
+              wordWrap:"break-word",
+              
+            }
+
+          }}
         >
           {foodPacket.desc}
           <br />
@@ -115,9 +114,15 @@ export default function CartCard({
 
           <>
 
-       
-
-          <ButtonGroup variant="contained" aria-label="Basic button group">
+          <Box
+            sx={{
+              display: 'flex',
+              justifyContent:"flex-start",
+              alignItems:"center",
+            
+            }}
+          >
+          <ButtonGroup variant="outlined" aria-label="Basic button group">
     <Button
     
     disabled = {foodPacket.quantity < 2 ? true : false}
@@ -125,7 +130,14 @@ export default function CartCard({
     sx={{
            backgroundColor: "#FD001C",
            border:"none",
-           ": hover": { backgroundColor: "#FD001C",border:"none" }
+           color:"white",
+           ": hover": { backgroundColor: "#FD001C",border:"none" },
+            ":disabled ":{
+               backgroundColor: 'rgba(163,163,163,0.5)',
+               color:"white" ,
+               cursor:"not-allowed"
+               
+            }
          }}
          
          
@@ -133,16 +145,24 @@ export default function CartCard({
          
          >–</Button>
 
-    <Button variant="outlined"  sx={{color:"black",border:"none",":hover ":{border:"none"} , background:"transparent",outline:"none"}}
+    <Button variant="outlined"  
     
+    sx={{
+      color: "black",
+      ":hover ": { border:"0.5px solid #c9c9c9" },
+      border:"0.5px solid #c9c9c9",
+      outline: "none",
+    }}
     >
 
-{foodPacket.quantity}
+{formatedQuantity ?? 0}
 
     </Button>
     <Button sx={{
            backgroundColor: "#FD001C",
            border:"none",
+           marginLeft:"30px",
+           color:"white",
            ": hover": { backgroundColor: "#FD001C",border:"none" },
          }}
          
@@ -151,6 +171,7 @@ export default function CartCard({
          
          >+</Button>
   </ButtonGroup>
+  </Box>
 
           </>
        

@@ -13,7 +13,7 @@ import Toolbar from "@mui/material/Toolbar";
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
 import * as React from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 import { useAppSelector } from "../redux/hooks";
 import LogoutIcon from "@mui/icons-material/Logout";
 import { Bounce, toast } from "react-toastify";
@@ -23,7 +23,7 @@ import { RootState } from "../redux/store";
 function Navbar({ cartCount }: any) {
   const storeState = useAppSelector((state:any) => state?.products);
 
-  const location = useLocation();
+
   const navigate = useNavigate();
 
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
@@ -35,7 +35,7 @@ function Navbar({ cartCount }: any) {
   const [fullName, setFullName] = React.useState<string>("");
 
   const navPacket = [
-    { navName: "All Foods", navLink: `/all-foods` },
+    { navName: "All Foods", navLink: `/` },
     { navName: "Pizza", navLink: "/pizza" },
     { navName: "Burger", navLink: "/burger" },
     { navName: "Icecream", navLink: "/icecream" },
@@ -86,9 +86,7 @@ function Navbar({ cartCount }: any) {
 
   return (
     <>
-      {location.pathname !== "/login" &&
-        location.pathname !== "/signup" &&
-        location.pathname !== "/"  && (
+      
           <AppBar
             position="static"
             sx={{
@@ -101,7 +99,7 @@ function Navbar({ cartCount }: any) {
             <Container maxWidth="xl">
               <Toolbar disableGutters>
                 <Link
-                  to={`/user/${storeState.userFullName}`}
+                  to={`/`}
                   style={{ textDecoration: "none", color: "white" }}
                 >
                   <RestaurantIcon
@@ -124,7 +122,7 @@ function Navbar({ cartCount }: any) {
                   }}
                 >
                   <Link
-                    to={`/all-foods`}
+                    to={`/`}
                     style={{ textDecoration: "none", color: "white" }}
                   >
                     Foods
@@ -165,10 +163,10 @@ function Navbar({ cartCount }: any) {
                         key={packet.navName}
                         onClick={handleCloseNavMenu}
                       >
-                        <Link to={packet.navLink}>
+                        <Link to={packet.navLink} style={{listStyleType:"none"}}>
                           <Typography
                             textAlign="center"
-                            sx={{ color: "white" }}
+                            sx={{ textDecoration:"none",color: "black",borderBottom:"white" }}
                           >
                             {packet.navName}
                           </Typography>
@@ -244,7 +242,9 @@ function Navbar({ cartCount }: any) {
               </Toolbar>
             </Container>
           </AppBar>
-        )}
+
+
+        <Outlet />
     </>
   );
 }

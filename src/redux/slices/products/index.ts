@@ -4,34 +4,12 @@ import {
   successNotification,
   warningNotification,
 } from "../../../utils/Notifications";
-import { Bounce } from "react-toastify";
+import { Bounce, Flip } from "react-toastify";
 import { products } from "../../../data/data";
+import { useAppDispatch } from "../../hooks";
 
-const successNotify = ({
-  msg,
-  position,
-  time,
-  transitionName,
-}: notificationTypes) =>
-  successNotification({
-    msg: msg,
-    position: position,
-    time: time,
-    transitionName: transitionName,
-  });
 
-const warningNotify = ({
-  msg,
-  position,
-  time,
-  transitionName,
-}: notificationTypes) =>
-  warningNotification({
-    msg: msg,
-    position: position,
-    time: time,
-    transitionName: transitionName,
-  });
+
 
 const productSlice: any = createSlice({
   initialState: {
@@ -39,27 +17,28 @@ const productSlice: any = createSlice({
     cartItems: [],
     userFullName: "",
     productData: products,
+    dataError: false
   },
   name: "productSlice",
   reducers: {
 
 
-    
     addToCart: (state: any, action: any) => {
       let cartProducts = JSON.parse(
         localStorage.getItem("cartProducts") as string
-      );
+      ) ?? [];
 
-      const isItemExsist = cartProducts.find(
+      state.dataError = false
+      const isItemExsist = cartProducts?.find(
         (item: any) => item?.id === action?.payload?.id
       );
 
       if (!isItemExsist) {
         let newObj = { ...action?.payload };
 
-        newObj.quantity = action.payload.quantity + 1;
+        newObj.quantity = action?.payload?.quantity + 1;
 
-        successNotify({
+        successNotification({
           msg: "Item added successfully!",
           position: "bottom-right",
           time: 500,
@@ -72,151 +51,94 @@ const productSlice: any = createSlice({
 
         state.cartItems = temp_arr;
 
-        state.cartCount = temp_arr.reduce(
+        state.cartCount = temp_arr?.reduce(
           (a: any, b: any) => a + b.quantity,
           0
         );
 
         localStorage.setItem("cartProducts", JSON.stringify(temp_arr));
 
-        // let findIndex = state.productData.findIndex(
-        //   (item: any) => item.id === action.payload.id
-        // );
-
-        // let copyProductData = [...state.productData];
-
-        // copyProductData[findIndex] = newObj;
-
-        // console.log(copyProductData[findIndex]);
-
-        // state.productData = copyProductData;
-
-        // console.log("AFTER SET");
       } else {
         let IncreaseExsisting = isItemExsist;
 
-        IncreaseExsisting.quantity = IncreaseExsisting.quantity + 1;
+        IncreaseExsisting.quantity = IncreaseExsisting?.quantity + 1;
 
         cartProducts[action.payload] = IncreaseExsisting;
 
-        state.cartItems = cartProducts;
-        state.cartCount = cartProducts.reduce(
+        state.cartItems = cartProducts ?? [];
+        state.cartCount = cartProducts?.reduce(
           (a: any, b: any) => a + b.quantity ?? 0,
           0
         );
 
         localStorage.setItem("cartProducts", JSON.stringify(cartProducts));
 
-        // let findIndex = state.productData.findIndex(
-        //   (item: any) => item.id === action.payload.id
-        // );
 
-        // let copyProductData = [...state.productData];
-
-        // copyProductData[findIndex] = IncreaseExsisting;
-
-        // state.productData = copyProductData;
       }
     },
 
     removeFromCart: (state: any, action) => {
+
       let cartProducts = JSON.parse(
         localStorage.getItem("cartProducts") as string
-      );
+      ) ?? []
 
-      const filteredArr = cartProducts.filter((item: any) => {
-        if (
-          action.payload.title !== item.title &&
-          action.payload.id !== item.id
-        ) {
-          return true;
-        } else {
-          return false;
-        }
-      });
+      if (cartProducts !== null) {
 
-      state.cartItems = filteredArr;
-      state.cartCount = filteredArr.reduce(
-        (a: any, b: any) => a + b.quantity,
-        0
-      );
-      // state.cartCount = filteredArr.length;
+        state.dataError = false;
 
-      localStorage.setItem("cartProducts", JSON.stringify(filteredArr));
+        const filteredArr = cartProducts?.filter((item: any) => action.payload.id !== item.id) ?? []
+
+        state.cartItems = filteredArr ?? []
+        state.cartCount = filteredArr?.reduce(
+          (a: any, b: any) => a + b?.quantity,
+          0
+        );
+        // state.cartCount = filteredArr.length;
+
+        localStorage.setItem("cartProducts", JSON.stringify(filteredArr));
 
 
-      // -- END REMOVE CODE -- //
-      // let filteredRemovedItem = cartProducts.filter(
-      //   (item: any) => item.id === action.payload.id
-      // );
+      } else {
+        state.dataError = true;
+      }
 
-      // let targetedItem = state.productData.find(
-      //   (item: any) => item.id === filteredRemovedItem.id
-      // );
 
-      // let resetItem = {
-      //   ...targetedItem,
-      //   quantity: 0,
-      // };
-
-      // let copyProductData = [...state.productData];
-
-      // let indexOfItem = state.productData.findIndex(
-      //   (item: any) => item.id === filteredRemovedItem.id
-      // );
-
-      // copyProductData[indexOfItem] = resetItem;
-
-      // state.productData = copyProductData;
-
-      // let copyProductData = filteredArr.reduce((a:any,b:any)=> a + b.quantity ,0);
-
-      //   copyProductData[findRemovedItem] = {
-
-      //     ...copyProductData[findRemovedItem],
-
-      //     quantity:findRemovedItem.quantity
-
-      //  state.productData = copyProductData
     },
 
     decreaseItemQuantity: (state: any, action: any) => {
       let cartProducts = JSON.parse(
         localStorage.getItem("cartProducts") as string
-      );
+      ) ?? [];
 
-      const isItemExsist = cartProducts.find(
-        (item: any, i: number) => item?.id === action?.payload?.id
-      );
 
-      let IncreaseExsisting = isItemExsist;
+      if (cartProducts !== null) {
+        state.dataError = false;
 
-      IncreaseExsisting.quantity = IncreaseExsisting.quantity - 1;
+        const isItemExsist = cartProducts?.find(
+          (item: any, i: number) => item?.id === action?.payload?.id
+        ) ?? {}
 
-      cartProducts[action.payload] = IncreaseExsisting;
+        let IncreaseExsisting = isItemExsist ?? {}
 
-      state.cartItems = cartProducts;
+        IncreaseExsisting.quantity = IncreaseExsisting?.quantity - 1 ?? 0
 
-      state.cartCount = cartProducts.reduce(
-        (a: any, b: any) => a + b.quantity,
-        0
-      );
+        cartProducts[action.payload] = IncreaseExsisting ?? {}
 
-      localStorage.setItem("cartProducts", JSON.stringify(cartProducts));
+        state.cartItems = cartProducts ?? [];
 
-      // let findIndex = state.productData.findIndex(
-      //   (item: any) => item.id === action.payload.id
-      // );
+        state.cartCount = cartProducts?.reduce(
+          (a: any, b: any) => a + b?.quantity,
+          0
+        );
 
-      // console.log("inProductDec", findIndex);
+        localStorage.setItem("cartProducts", JSON.stringify(cartProducts));
 
-      // let copyProductData = [...state.productData];
+      } else {
 
-      // copyProductData[findIndex] = IncreaseExsisting;
+        state.dataError = true;
+      }
 
-      // console.log("DECREASE...", copyProductData[findIndex]);
-
-      // state.productData = copyProductData;
     },
 
     setItemsToStore: (state: any, action: any) => {
@@ -231,6 +153,32 @@ const productSlice: any = createSlice({
     setCartCount: (state: any, action: any) => {
       state.cartCount = action.payload;
     },
+
+    clearAllItems:(state:any,action:any)=>{
+      
+      state.cartItems = [];
+      state.cartCount = 0;
+      
+      let cartProducts = JSON.stringify(localStorage.getItem("cartProducts") as string);
+
+      if(cartProducts!== null){
+
+        localStorage.removeItem("cartProducts");
+        
+        setTimeout(() => {
+          
+        successNotification({
+          msg:"All items removed successfully!",
+          position:"bottom-right",
+          time:750,
+          transitionName:Flip
+        });
+
+      }, 500);
+      }
+
+
+    }
   },
 });
 
@@ -243,4 +191,5 @@ export const {
   setCartCount,
   removeFromCart,
   decreaseItemQuantity,
+  clearAllItems
 } = productSlice.actions;
