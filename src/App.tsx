@@ -36,122 +36,131 @@ function App() {
   const dispatch = useAppDispatch();
   const storeState: any = useAppSelector((state) => state.products);
 
-  useEffect(() => {
-    let isToken = JSON.parse(localStorage.getItem("userToken") ?? '' as string)
+  // useEffect(() => {
+  //   let isToken = JSON.parse(
+  //     localStorage.getItem("userToken") ?? ("" as string)
+  //   );
 
+  //   if (isToken === null) {
+  //     localStorage.setItem("userToken", JSON.stringify(""));
+  //   } else {
+  //     if (isToken) {
+  //       let userFullName = isToken?.split("-");
+  //       dispatch(
+  //         setUserFullName(
+  //           `${userFullName[0]?.toLowerCase()}-${userFullName[1]?.toLowerCase()}`
+  //         )
+  //       );
+  //     }
+  //   }
 
-    if (isToken === null) {
-      localStorage.setItem("userToken",  JSON.stringify("") );
-    }
-    
-    else {
-      if (isToken) {
-        let userFullName = isToken?.split("-");
-        dispatch(
-          setUserFullName(
-            `${userFullName[0]?.toLowerCase()}-${userFullName[1]?.toLowerCase()}`
-          )
-        );
-      }
-    }
+  //   let cartProducts =
+  //     JSON.parse(localStorage.getItem("cartProducts") as string) ?? [];
 
-
-    let cartProducts = JSON.parse( localStorage.getItem("cartProducts") as string ) ?? []
-
-
-    if (cartProducts === null) {
-      localStorage.setItem("cartProducts", JSON.stringify([]));
-    } else if (cartProducts !== null) {
-      dispatch(setItemsToStore(cartProducts));
-      let currentQuantity = cartProducts.reduce((a:any,b:any)=> a + b.quantity ,0);
-      dispatch(setCartCount(currentQuantity));
-    }
-
-    
-  },[]);
+  //   if (cartProducts === null) {
+  //     localStorage.setItem("cartProducts", JSON.stringify([]));
+  //   } else if (cartProducts !== null) {
+  //     dispatch(setItemsToStore(cartProducts));
+  //     let currentQuantity = cartProducts.reduce(
+  //       (a: any, b: any) => a + b.quantity,
+  //       0
+  //     );
+  //     dispatch(setCartCount(currentQuantity));
+  //   }
+  // }, []);
 
   return (
     <>
       <Router>
-
         <Routes>
-        
-        
-<Route path="/signup" element={<AuthProtection><SignUp /></AuthProtection>} />
-
-<Route path="/login" element={<AuthProtection><LogIn /></AuthProtection>} />
-
-        <Route path="/" element={<Navbar cartCount={storeState?.cartCount} />}>
-        
-
           <Route
-          index
+            path="/signup"
             element={
-              <RouteProtection>
-                <AllFoods />
-              </RouteProtection>
+              <AuthProtection>
+                <SignUp />
+              </AuthProtection>
             }
           />
 
           <Route
-            path="add-to-cart"
+            path="/login"
             element={
-              <RouteProtection>
-                <Cart />
-              </RouteProtection>
-            }
-          />
-          <Route
-            path="pizza"
-            element={
-              <RouteProtection>
-                <Pizza />
-              </RouteProtection>
-            }
-          />
-          <Route
-            path="burger"
-            element={
-              <RouteProtection>
-                <Burger />
-              </RouteProtection>
-            }
-          />
-          <Route
-            path="icecream"
-            element={
-              <RouteProtection>
-                <Icecream />
-              </RouteProtection>
-            }
-          />
-          <Route
-            path="noodles"
-            element={
-              <RouteProtection>
-                <Noodles/>
-              </RouteProtection>
-            }
-          />
-          <Route
-            path="salad"
-            element={
-              <RouteProtection>
-                <Salad />
-              </RouteProtection>
-            }
-          />
-          <Route
-            path="drinks"
-            element={
-              <RouteProtection>
-                <Drinks />
-              </RouteProtection>
+              <AuthProtection>
+                <LogIn />
+              </AuthProtection>
             }
           />
 
+          <Route
+            path="/"
+            element={<Navbar cartCount={storeState?.cartCount} />}
+          >
+            <Route
+              index
+              element={
+                <RouteProtection>
+                  <AllFoods />
+                </RouteProtection>
+              }
+            />
 
-</Route>
+            <Route
+              path="add-to-cart"
+              element={
+                <RouteProtection>
+                  <Cart />
+                </RouteProtection>
+              }
+            />
+            <Route
+              path="pizza"
+              element={
+                <RouteProtection>
+                  <Pizza />
+                </RouteProtection>
+              }
+            />
+            <Route
+              path="burger"
+              element={
+                <RouteProtection>
+                  <Burger />
+                </RouteProtection>
+              }
+            />
+            <Route
+              path="icecream"
+              element={
+                <RouteProtection>
+                  <Icecream />
+                </RouteProtection>
+              }
+            />
+            <Route
+              path="noodles"
+              element={
+                <RouteProtection>
+                  <Noodles />
+                </RouteProtection>
+              }
+            />
+            <Route
+              path="salad"
+              element={
+                <RouteProtection>
+                  <Salad />
+                </RouteProtection>
+              }
+            />
+            <Route
+              path="drinks"
+              element={
+                <RouteProtection>
+                  <Drinks />
+                </RouteProtection>
+              }
+            />
+          </Route>
           <Route path="*" element={<ErrorPage />} />
         </Routes>
       </Router>

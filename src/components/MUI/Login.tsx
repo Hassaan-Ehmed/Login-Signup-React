@@ -19,6 +19,10 @@ import {
   warningNotification,
 } from "../../utils/Notifications";
 import { Decrypt, Encrypt } from "../../utils/Incryption";
+import {
+  getDataToLocalStorage,
+  saveDataToLocalStorage,
+} from "../../utils/localstorage";
 
 // TODO remove, this demo shouldn't need to reset the theme.
 const defaultTheme = createTheme();
@@ -72,30 +76,32 @@ export default function LogIn() {
     });
 
   React.useEffect(() => {
-    
-    let isToken =  JSON.parse(localStorage.getItem("userToken") as string)
-    
-    // isToken = isToken ? Decrypt(isToken) : null 
+    const dumm_data = {
+      username: "Hassan",
+      id: "1233321",
+    };
+    // saveDataToLocalStorage("test", dumm_data);
+    getDataToLocalStorage("test");
 
-
-    if (isToken === null) {
-      localStorage.setItem("userToken",  JSON.stringify("") );
-    }
-
-    let userInfoBox = JSON.parse( localStorage.getItem("userInfoBox" || "[]")  as string );
-
-    // userInfoBox = userInfoBox ? Decrypt(userInfoBox) : null;
-    
-    if (userInfoBox === null) {
-      localStorage.setItem("userInfoBox", JSON.stringify([]));
-    }
+    // let isToken = JSON.parse(localStorage.getItem("userToken") as string)
+    // if (isToken === null) {
+    //   localStorage.setItem("userToken",  JSON.stringify("") );
+    // }else if (isToken !== null){
+    //   isToken = Decrypt(localStorage.getItem("userToken"))
+    // }
+    // let userInfoBox = JSON.parse( localStorage.getItem("userInfoBox" || "[]")  as string );
+    // // userInfoBox = userInfoBox ? Decrypt(userInfoBox) : null;
+    // if (userInfoBox === null) {
+    //   localStorage.setItem("userInfoBox", JSON.stringify([]));
+    // }
   });
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     if (state?.email && state?.password) {
-      let userInfoBox = JSON.parse(  localStorage.getItem("userInfoBox" || "[]")  as string );
+      let userInfoBox =
+        JSON.parse(localStorage.getItem("userInfoBox" || "[]") as string) ?? [];
 
       const user = userInfoBox?.find(
         (userPacket: any) => userPacket?.emailData === state?.email
@@ -105,7 +111,7 @@ export default function LogIn() {
         if (user.passwordData === state?.password) {
           let token = `${user.fNameData}-${user.lNameData}-#123$^*#`;
 
-          localStorage.setItem("userToken", JSON.stringify(token))
+          localStorage.setItem("userToken", Encrypt(JSON.stringify(token)));
 
           successNotify({
             msg: "Login Successfully !",
@@ -115,9 +121,7 @@ export default function LogIn() {
           });
 
           setTimeout(() => {
-            navigate(
-              `/`
-            );
+            navigate(`/`);
           }, 1800);
         } else {
           warningNotify({

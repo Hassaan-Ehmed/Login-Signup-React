@@ -48,10 +48,10 @@ export default function ProductCard({
   const [itemPresent, setItemPresent] = useState(false);
 
   useEffect(() => {
-    let cartProducts = JSON.parse( localStorage.getItem("cartProducts") as string )
+    let cartProducts = JSON.parse( localStorage.getItem("cartProducts") as string ) ?? []
 
 
-    const isPresent = cartProducts.filter((i: any) => i?.id === foodPacket?.id);
+    const isPresent = cartProducts?.filter((i: any) => i?.id === foodPacket?.id);
     if (isPresent?.length > 0) {
       setItemPresent(true);
     }
