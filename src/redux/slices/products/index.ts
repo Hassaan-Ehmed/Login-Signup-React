@@ -7,6 +7,7 @@ import {
 import { Bounce, Flip } from "react-toastify";
 import { products } from "../../../data/data";
 import { useAppDispatch } from "../../hooks";
+import { Decrypt, Encrypt } from "../../../utils/Incryption";
 
 
 
@@ -24,9 +25,7 @@ const productSlice: any = createSlice({
 
 
     addToCart: (state: any, action: any) => {
-      let cartProducts = JSON.parse(
-        localStorage.getItem("cartProducts") as string
-      ) ?? [];
+      let cartProducts = JSON.parse(localStorage.getItem("cartProducts") as string ) ?? [];
 
       state.dataError = false
       const isItemExsist = cartProducts?.find(
@@ -56,7 +55,7 @@ const productSlice: any = createSlice({
           0
         );
 
-        localStorage.setItem("cartProducts", JSON.stringify(temp_arr));
+        localStorage.setItem("cartProducts",  JSON.stringify(temp_arr) );
 
       } else {
         let IncreaseExsisting = isItemExsist;
@@ -71,7 +70,7 @@ const productSlice: any = createSlice({
           0
         );
 
-        localStorage.setItem("cartProducts", JSON.stringify(cartProducts));
+        localStorage.setItem("cartProducts", JSON.stringify(cartProducts) );
 
 
       }
@@ -79,9 +78,7 @@ const productSlice: any = createSlice({
 
     removeFromCart: (state: any, action) => {
 
-      let cartProducts = JSON.parse(
-        localStorage.getItem("cartProducts") as string
-      ) ?? []
+      let cartProducts = JSON.parse( localStorage.getItem("cartProducts") as string ) ?? []
 
       if (cartProducts !== null) {
 
@@ -96,7 +93,7 @@ const productSlice: any = createSlice({
         );
         // state.cartCount = filteredArr.length;
 
-        localStorage.setItem("cartProducts", JSON.stringify(filteredArr));
+        localStorage.setItem("cartProducts", JSON.stringify(filteredArr) );
 
 
       } else {
@@ -107,9 +104,7 @@ const productSlice: any = createSlice({
     },
 
     decreaseItemQuantity: (state: any, action: any) => {
-      let cartProducts = JSON.parse(
-        localStorage.getItem("cartProducts") as string
-      ) ?? [];
+      let cartProducts = JSON.parse( localStorage.getItem("cartProducts") as string ) ?? [];
 
 
       if (cartProducts !== null) {
@@ -159,7 +154,7 @@ const productSlice: any = createSlice({
       state.cartItems = [];
       state.cartCount = 0;
       
-      let cartProducts = JSON.stringify(localStorage.getItem("cartProducts") as string);
+      let cartProducts = JSON.parse( localStorage.getItem("cartProducts") as string) ?? []
 
       if(cartProducts!== null){
 

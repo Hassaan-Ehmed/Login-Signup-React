@@ -29,6 +29,7 @@ import AuthProtection from "./utils/AuthProtection";
 import Noodles from "./pages/Noodles";
 import Salad from "./pages/Salad";
 import Drinks from "./pages/Drinks";
+import { Decrypt, Encrypt } from "./utils/Incryption";
 
 function App() {
   const params = useParams();
@@ -36,11 +37,14 @@ function App() {
   const storeState: any = useAppSelector((state) => state.products);
 
   useEffect(() => {
-    let isToken = JSON.parse(localStorage.getItem("userToken") as string) ?? ''
+    let isToken = JSON.parse(localStorage.getItem("userToken") ?? '' as string)
+
 
     if (isToken === null) {
-      localStorage.setItem("userToken", JSON.stringify(""));
-    } else {
+      localStorage.setItem("userToken",  JSON.stringify("") );
+    }
+    
+    else {
       if (isToken) {
         let userFullName = isToken?.split("-");
         dispatch(
@@ -51,9 +55,9 @@ function App() {
       }
     }
 
-    let cartProducts = JSON.parse(
-      localStorage.getItem("cartProducts") as string
-    ) ?? []
+
+    let cartProducts = JSON.parse( localStorage.getItem("cartProducts") as string ) ?? []
+
 
     if (cartProducts === null) {
       localStorage.setItem("cartProducts", JSON.stringify([]));

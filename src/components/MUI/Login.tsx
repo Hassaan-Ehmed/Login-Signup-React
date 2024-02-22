@@ -18,6 +18,7 @@ import {
   successNotification,
   warningNotification,
 } from "../../utils/Notifications";
+import { Decrypt, Encrypt } from "../../utils/Incryption";
 
 // TODO remove, this demo shouldn't need to reset the theme.
 const defaultTheme = createTheme();
@@ -71,16 +72,20 @@ export default function LogIn() {
     });
 
   React.useEffect(() => {
-    let isToken = localStorage.getItem("userToken");
+    
+    let isToken =  JSON.parse(localStorage.getItem("userToken") as string)
+    
+    // isToken = isToken ? Decrypt(isToken) : null 
+
 
     if (isToken === null) {
-      localStorage.setItem("userToken", JSON.stringify(""));
+      localStorage.setItem("userToken",  JSON.stringify("") );
     }
 
-    let userInfoBox = JSON.parse(
-      localStorage.getItem("userInfoBox" || "[]") as string
-    );
+    let userInfoBox = JSON.parse( localStorage.getItem("userInfoBox" || "[]")  as string );
 
+    // userInfoBox = userInfoBox ? Decrypt(userInfoBox) : null;
+    
     if (userInfoBox === null) {
       localStorage.setItem("userInfoBox", JSON.stringify([]));
     }
@@ -90,19 +95,17 @@ export default function LogIn() {
     event.preventDefault();
 
     if (state?.email && state?.password) {
-      let userInfoBox = JSON.parse(
-        localStorage.getItem("userInfoBox" || "[]") as string
-      );
+      let userInfoBox = JSON.parse(  localStorage.getItem("userInfoBox" || "[]")  as string );
 
-      const user = userInfoBox.find(
-        (userPacket: any) => userPacket.emailData === state.email
+      const user = userInfoBox?.find(
+        (userPacket: any) => userPacket?.emailData === state?.email
       );
 
       if (user) {
         if (user.passwordData === state?.password) {
           let token = `${user.fNameData}-${user.lNameData}-#123$^*#`;
 
-          localStorage.setItem("userToken", JSON.stringify(token));
+          localStorage.setItem("userToken", JSON.stringify(token))
 
           successNotify({
             msg: "Login Successfully !",

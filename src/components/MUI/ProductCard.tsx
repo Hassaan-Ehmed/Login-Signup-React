@@ -23,6 +23,7 @@ import {
   warningNotification,
 } from "../../utils/Notifications";
 import { useEffect, useMemo, useState } from "react";
+import { Decrypt } from "../../utils/Incryption";
 
 const bull = (
   <Box
@@ -47,9 +48,8 @@ export default function ProductCard({
   const [itemPresent, setItemPresent] = useState(false);
 
   useEffect(() => {
-    let cartProducts = JSON.parse(
-      localStorage.getItem("cartProducts") as string
-    ) ?? []
+    let cartProducts = JSON.parse( localStorage.getItem("cartProducts") as string )
+
 
     const isPresent = cartProducts.filter((i: any) => i?.id === foodPacket?.id);
     if (isPresent?.length > 0) {
@@ -59,8 +59,6 @@ export default function ProductCard({
 
 
 }, [storeState?.cartItems]);
-
-
 
 
   // console.log("PRODUCT QUANTITY::::",foodPacket.quantity);

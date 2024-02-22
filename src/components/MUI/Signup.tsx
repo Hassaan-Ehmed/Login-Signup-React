@@ -18,6 +18,7 @@ import {
   successNotification,
   warningNotification,
 } from "../../utils/Notifications";
+import { Decrypt, Encrypt } from "../../utils/Incryption";
 // TODO remove, this demo shouldn't need to reset the theme.
 const defaultTheme = createTheme();
 
@@ -75,17 +76,7 @@ export default function SignUp() {
     }
   );
 
-  // const errorNotify = (msg:string) =>toast.error(`${msg}`, {
-  //   position: "top-right",
-  //   autoClose: 2000,
-  //   hideProgressBar: false,
-  //   closeOnClick: true,
-  //   pauseOnHover: false,
-  //   draggable: true,
-  //   progress: undefined,
-  //   theme: "light",
-  //   transition: Bounce,
-  //   });
+ 
 
   const errorNotify = ({
     msg,
@@ -124,10 +115,12 @@ export default function SignUp() {
       time: time,
       transitionName: transitionName,
     });
+
+
+
+
   React.useEffect(() => {
-    let userInfoBox = JSON.parse(
-      localStorage.getItem("userInfoBox" || "[]") as string
-    );
+    let userInfoBox = JSON.parse(  localStorage.getItem("userInfoBox" || "[]" ) as string )
 
     if (userInfoBox === null) {
       localStorage.setItem("userInfoBox", JSON.stringify([]));
@@ -218,9 +211,9 @@ export default function SignUp() {
       !state.cityError
     ) {
       if (state?.email && state?.password && state.uName) {
-        let userInfoBox = JSON.parse(
-          localStorage.getItem("userInfoBox" || "[]") as string
-        );
+
+        let userInfoBox = JSON.parse( localStorage.getItem("userInfoBox" || "[]")  as string)
+
 
         const isEmailExsist = userInfoBox.find(
           (userPacket: any) => userPacket.emailData === state.email
@@ -235,10 +228,6 @@ if(!isUserNameExsist){
 
   if (!isEmailExsist) {
     
-    const isPasswordExsist = userInfoBox.find(
-      (userPacket: any) => userPacket.passwordData === state.password
-    );
-
 
       setUserInfo((prevState) => ({
         ...prevState,
