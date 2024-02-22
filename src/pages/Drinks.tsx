@@ -2,7 +2,7 @@ import React from 'react'
 import { products } from '../data/data'
 import Header from '../components/Header';
 import Products from '../components/Products';
-import pizzaImage from '../images/pizza1.jpg'
+import drinkImage from '../images/drink2.jpg'
 import { useAppSelector } from '../redux/hooks';
 
 export default function Drinks() {
@@ -13,7 +13,7 @@ const storeState:any = useAppSelector( state => state.products );
   
   return (
     <>
-      <Header heading={"Drinks"} img ={pizzaImage} />
+      <Header heading={"Drinks"} img ={drinkImage} />
 
 <Products foodsArray={drinks ?? []} />
     </>

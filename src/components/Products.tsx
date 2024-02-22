@@ -3,13 +3,14 @@ import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import ProductCard from "./MUI/ProductCard";
-import { useParams } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import { useAppSelector } from "../redux/hooks";
 
 export default function Products({ foodsArray, forCart }: any) {
   const storeState: any = useAppSelector((state) => state.products);
   const food: any = foodsArray; // main array
   const params = useParams();
+  const location  = useLocation()
   const categories: string[] = []; // Array to store unique categories
 
   // Extract unique categories from the food array
@@ -24,19 +25,38 @@ export default function Products({ foodsArray, forCart }: any) {
       {categories.map((category, categoryIndex) => (
         <div key={categoryIndex}>
           {/* Category heading */}
-          <Typography
-            variant="h4"
-            component="div"
-            sx={{
-              textAlign: "center",
-              backgroundColor: "#FFCB99",
-              padding: "10px 0",
-              margin: "30px 0 5px 0",
-            }}
-          >
-            ~ {category} ~
-          </Typography>
 
+        {location.pathname === "/" && (
+
+
+<div 
+style={{
+  width:"100%",
+   display:"flex",
+   justifyContent:"center",
+   alignItems:"center",
+   margin: "50px 0 10px 0",
+
+   
+   }}>
+         <Typography
+          variant="h4"
+          component="div"
+          sx={{
+            width:"fit-content",
+            fontSize:"2.2vw",
+            textAlign: "center",
+            backgroundColor: "#FFAC00",
+            padding: "10px 50px",
+            boxShadow: "0px 20px 26px -17px black",
+            borderRadius:"10px"
+          }}
+        >
+          {category}
+        </Typography>
+        </div>
+
+        )} 
           {/* Grid container for items of current category */}
           <Grid container spacing={2} sx={{ padding: "0 20px" }}>
             {food
