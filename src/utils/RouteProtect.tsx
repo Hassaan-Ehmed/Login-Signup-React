@@ -1,28 +1,30 @@
 import React from "react";
 import { Navigate } from "react-router-dom";
 import { Decrypt } from "./Incryption";
+import { getDataToLocalStorage } from "./localstorage";
 
 export default function RouteProtection({ children }: any) {
 
-  // let checkToken;
-
-  // try {
-
-  //   checkToken = JSON.parse( localStorage.getItem("userToken") as string)
-    
-  // } catch(error) {
-    
-  //   checkToken = JSON.parse( Decrypt(localStorage.getItem("userToken")) as string)
-    
-  // }
-  
   
 
+  try {
+
+   let isToken = getDataToLocalStorage("userToken") ?? null;
+    
+      
+    if (!isToken) {
+      return <Navigate to={"/login"} replace />;
+    }
+    
+    return children;
+    
+    
+      } 
 
 
-  // if (!checkToken) {
-  //   return <Navigate to={"/login"} replace />;
-  // }
-
-  return children;
+  catch(error) {
+    
+    
+  }
+  
 }

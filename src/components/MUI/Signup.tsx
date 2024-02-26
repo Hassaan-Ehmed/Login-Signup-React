@@ -19,6 +19,7 @@ import {
   warningNotification,
 } from "../../utils/Notifications";
 import { Decrypt, Encrypt } from "../../utils/Incryption";
+import { getDataToLocalStorage, saveDataToLocalStorage } from "../../utils/localstorage";
 // TODO remove, this demo shouldn't need to reset the theme.
 const defaultTheme = createTheme();
 
@@ -120,16 +121,15 @@ export default function SignUp() {
 
 
   React.useEffect(() => {
-    let userInfoBox = JSON.parse(  localStorage.getItem("userInfoBox" || "[]" ) as string )
+    let userInfoBox =  getDataToLocalStorage("userInfoBox") ?? []
 
     if (userInfoBox === null) {
-      localStorage.setItem("userInfoBox", JSON.stringify([]));
+      saveDataToLocalStorage("userInfoBox",[]);
     } else if (dataReady) {
-      let dataPacket = [...userInfoBox];
-
+      let dataPacket:any = [...userInfoBox]
       dataPacket.push(userInfo);
 
-      localStorage.setItem("userInfoBox", JSON.stringify(dataPacket));
+saveDataToLocalStorage("userInfoBox",dataPacket);
 
       setDataReady(false);
     }
@@ -212,13 +212,13 @@ export default function SignUp() {
     ) {
       if (state?.email && state?.password && state.uName) {
 
-        let userInfoBox = JSON.parse( localStorage.getItem("userInfoBox" || "[]")  as string)
+        let userInfoBox:any =  getDataToLocalStorage("userInfoBox") ?? [];
 
 
-        const isEmailExsist = userInfoBox.find(
+        const isEmailExsist:any = userInfoBox?.find(
           (userPacket: any) => userPacket.emailData === state.email
         );
-        const isUserNameExsist = userInfoBox.find(
+        const isUserNameExsist:any = userInfoBox?.find(
           (userPacket: any) => userPacket.uNameData === state.uName
         );
         

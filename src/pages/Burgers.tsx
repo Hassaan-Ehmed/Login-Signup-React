@@ -4,10 +4,12 @@ import Header from '../components/Header';
 import Products from '../components/Products';
 import burgerImage from '../images/burger3.jpg'
 import { useAppSelector } from '../redux/hooks';
+import { useScrollRest } from '../utils/Hooks';
 
 export default function Burger() {
 
 
+useScrollRest();
 
   const storeState:any = useAppSelector( state => state.products );
 

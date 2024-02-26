@@ -75,33 +75,15 @@ export default function LogIn() {
       transitionName: transitionName,
     });
 
-  React.useEffect(() => {
-    const dumm_data = {
-      username: "Hassan",
-      id: "1233321",
-    };
-    // saveDataToLocalStorage("test", dumm_data);
-    getDataToLocalStorage("test");
 
-    // let isToken = JSON.parse(localStorage.getItem("userToken") as string)
-    // if (isToken === null) {
-    //   localStorage.setItem("userToken",  JSON.stringify("") );
-    // }else if (isToken !== null){
-    //   isToken = Decrypt(localStorage.getItem("userToken"))
-    // }
-    // let userInfoBox = JSON.parse( localStorage.getItem("userInfoBox" || "[]")  as string );
-    // // userInfoBox = userInfoBox ? Decrypt(userInfoBox) : null;
-    // if (userInfoBox === null) {
-    //   localStorage.setItem("userInfoBox", JSON.stringify([]));
-    // }
-  });
+
+
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     if (state?.email && state?.password) {
-      let userInfoBox =
-        JSON.parse(localStorage.getItem("userInfoBox" || "[]") as string) ?? [];
+      let userInfoBox:any = getDataToLocalStorage("userInfoBox") ?? []
 
       const user = userInfoBox?.find(
         (userPacket: any) => userPacket?.emailData === state?.email
@@ -111,7 +93,7 @@ export default function LogIn() {
         if (user.passwordData === state?.password) {
           let token = `${user.fNameData}-${user.lNameData}-#123$^*#`;
 
-          localStorage.setItem("userToken", Encrypt(JSON.stringify(token)));
+         saveDataToLocalStorage("userToken",token);
 
           successNotify({
             msg: "Login Successfully !",
@@ -148,45 +130,8 @@ export default function LogIn() {
       });
     }
   };
-  // if((state?.email && !state.emailError && state.email.match(emailRegex)) || (state?.password && !state.passwordError && state.password.match(passwordRegex))){
-  // }
-
-  // userInfoBox?.map((userPacket:any)=>{
-
-  //   if(userPacket.emailData === state?.email){
-
-  //     if(userPacket?.passwordData === state?.password){
-
-  //       console.log(`Welcome ${state.userPacket?.fNameData} ${state.userPacket?.lNameData}`);
-
-  //     }else  if (state?.password && !state.passwordError){
-  //       console.log("Incorrect Password !");
-
-  //     }
-
-  //   }else {
-  //     console.log("this User don't Exsist!");
-
-  //   }
-
-  // })
-
-  // if(dataReady){
-
-  //   setDataReady(false)
-
-  // }
-
-  //   const handleDate=(e: React.ChangeEvent<HTMLFormElement>)=>{
-
-  // console.log(e.target.value);
-
-  //   }
-  //   const handleDate=(e: React.ChangeEvent<HTMLFormElement>)=>{
-
-  // console.log(e.target.value);
-
-  //   }
+ 
+  
   return (
     <ThemeProvider theme={defaultTheme}>
       <Container component="main" maxWidth="xs">

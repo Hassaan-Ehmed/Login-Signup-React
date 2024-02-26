@@ -10,6 +10,7 @@ import { Typography } from '@mui/material';
 import Button from '@mui/material/Button';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { clearAllItems } from '../redux/slices/products';
+import { useScrollRest } from '../utils/Hooks';
 
 
 
@@ -45,6 +46,7 @@ export const TotalDiv = ({text,numbers}:any)=>{
 }
 
 export default function Cart() {
+  useScrollRest();
 
 // const [totalPrice,setTotalPrice] = useState([]);
 
@@ -91,7 +93,7 @@ return (
 <div style={{width:"100%",display:'flex',justifyContent:"center",backgroundColor:"#F5F5DC",position:'relative'}}>
 
 
-<div style={{width:'60%',height:"100vh",display:"flex",justifyContent:"center",gap:10,boxShadow:"black -2px 7px 12px -7px; "}} >
+<div style={{width:'60%',height:"100%",display:"flex",justifyContent:"center",gap:10,boxShadow:"black -2px 7px 12px -7px; "}} >
 
 
 <div style={{width:"35%",height:"100%",backgroundColor:"white",padding:"20px",overflow:"auto",boxShadow:"#000000 0px 1px 20px -16px"}}>
@@ -136,7 +138,7 @@ onClick={handleRemoveAllItems}
 
 
 <div style={{maxWidth:'15%',height:"72vh",backgroundColor:"#1B4226",display:"flex",
-flexDirection:"column",justifyContent:"space-between",alignItems:"center",overflowY:"hidden",boxShadow:"black -2px 7px 12px -7px; ",position:'fixed',right:0}} >
+flexDirection:"column",justifyContent:"space-between",alignItems:"center",overflowY:"hidden",boxShadow:"black -2px 7px 12px -7px; ",position:'absolute',right:0}} >
 
 
 

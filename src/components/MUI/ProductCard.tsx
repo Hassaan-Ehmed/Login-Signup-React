@@ -24,6 +24,7 @@ import {
 } from "../../utils/Notifications";
 import { useEffect, useMemo, useState } from "react";
 import { Decrypt } from "../../utils/Incryption";
+import { getDataToLocalStorage } from "../../utils/localstorage";
 
 const bull = (
   <Box
@@ -48,7 +49,8 @@ export default function ProductCard({
   const [itemPresent, setItemPresent] = useState(false);
 
   useEffect(() => {
-    let cartProducts = JSON.parse( localStorage.getItem("cartProducts") as string ) ?? []
+    
+    let cartProducts:any = getDataToLocalStorage("cartProducts") ?? [];
 
 
     const isPresent = cartProducts?.filter((i: any) => i?.id === foodPacket?.id);

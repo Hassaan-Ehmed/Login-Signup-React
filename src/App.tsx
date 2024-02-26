@@ -9,6 +9,7 @@ import {
   Route,
   useNavigate,
   useParams,
+  Navigate,
 } from "react-router-dom";
 import RouteProtection from "./utils/RouteProtect";
 import {
@@ -30,44 +31,65 @@ import Noodles from "./pages/Noodles";
 import Salad from "./pages/Salad";
 import Drinks from "./pages/Drinks";
 import { Decrypt, Encrypt } from "./utils/Incryption";
+import { getDataToLocalStorage, saveDataToLocalStorage } from "./utils/localstorage";
 
 function App() {
   const params = useParams();
   const dispatch = useAppDispatch();
   const storeState: any = useAppSelector((state) => state.products);
 
-  // useEffect(() => {
-  //   let isToken = JSON.parse(
-  //     localStorage.getItem("userToken") ?? ("" as string)
-  //   );
+const navigate = (pathname:string) => <Navigate to={pathname} replace />;
 
-  //   if (isToken === null) {
-  //     localStorage.setItem("userToken", JSON.stringify(""));
-  //   } else {
-  //     if (isToken) {
-  //       let userFullName = isToken?.split("-");
-  //       dispatch(
-  //         setUserFullName(
-  //           `${userFullName[0]?.toLowerCase()}-${userFullName[1]?.toLowerCase()}`
-  //         )
-  //       );
-  //     }
-  //   }
+  useEffect(() => {
+    
 
-  //   let cartProducts =
-  //     JSON.parse(localStorage.getItem("cartProducts") as string) ?? [];
+let userInfoBox = getDataToLocalStorage("userInfoBox");
+let cartProducts:any = getDataToLocalStorage("cartProducts");
+let isToken = getDataToLocalStorage("userToken");
 
-  //   if (cartProducts === null) {
-  //     localStorage.setItem("cartProducts", JSON.stringify([]));
-  //   } else if (cartProducts !== null) {
-  //     dispatch(setItemsToStore(cartProducts));
-  //     let currentQuantity = cartProducts.reduce(
-  //       (a: any, b: any) => a + b.quantity,
-  //       0
-  //     );
-  //     dispatch(setCartCount(currentQuantity));
-  //   }
-  // }, []);
+
+if((!userInfoBox) || (!cartProducts) || (!isToken)){
+
+
+localStorage.clear();
+
+navigate("/login")
+
+
+}else{
+  
+
+
+  if (isToken === null) {
+
+    saveDataToLocalStorage("userToken","");
+
+  } else {
+    if (isToken) {
+      let userFullName = isToken?.split("-");
+      dispatch(
+        setUserFullName(
+          `${userFullName[0]?.toLowerCase()}-${userFullName[1]?.toLowerCase()}`
+        )
+      );
+    }
+  }
+
+cartProducts =
+  getDataToLocalStorage("cartProducts")  ?? [];
+
+  if (cartProducts === null) {
+saveDataToLocalStorage("cartProducts",[])
+  } else if (cartProducts !== null) {
+    dispatch(setItemsToStore(cartProducts));
+    let currentQuantity = cartProducts.reduce(
+      (a: any, b: any) => a + b.quantity,
+      0
+    );
+    dispatch(setCartCount(currentQuantity));
+  }
+}
+  }, []);
 
   return (
     <>

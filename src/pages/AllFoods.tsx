@@ -5,23 +5,13 @@ import { products } from "../data/data";
 import { useAppDispatch, useAppSelector } from "../redux/hooks";
 import { setUserFullName } from "../redux/slices/products";
 import fastFoodImage from "../images/fastFood3.jpg";
+import { useScrollRest } from "../utils/Hooks";
 export default function AllFoods() {
+  useScrollRest()
   const params = useParams();
   const dispatch = useAppDispatch();
   const storeState = useAppSelector((state: any) => state.products);
 
-  // let namePacket: any = params.name?.split("-");
-
-  // const fName = `${namePacket[0]
-  //   ?.at(0)
-  //   ?.toUpperCase()
-  //   .concat(namePacket[0].slice(1))}`;
-  // const lName = `${namePacket[1]
-  //   ?.at(0)
-  //   ?.toUpperCase()
-  //   .concat(namePacket[1].slice(1))}`;
-
-  // dispatch(setUserFullName(params?.name as any));
 
   return (
     <>

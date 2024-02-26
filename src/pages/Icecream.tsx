@@ -4,8 +4,13 @@ import Header from "../components/Header";
 import Products from "../components/Products";
 import icecreamImage from "../images/icecream3.jpg";
 import { useAppSelector } from "../redux/hooks";
+import { useScrollRest } from "../utils/Hooks";
 
 export default function Icecream() {
+
+
+  useScrollRest()
+
   const storeState: any = useAppSelector((state) => state.products);
 
   let icecreams: any = storeState?.productData.filter(

@@ -8,6 +8,7 @@ import { Bounce, Flip } from "react-toastify";
 import { products } from "../../../data/data";
 import { useAppDispatch } from "../../hooks";
 import { Decrypt, Encrypt } from "../../../utils/Incryption";
+import { getDataToLocalStorage, saveDataToLocalStorage } from "../../../utils/localstorage";
 
 
 
@@ -25,7 +26,7 @@ const productSlice: any = createSlice({
 
 
     addToCart: (state: any, action: any) => {
-      let cartProducts = JSON.parse(localStorage.getItem("cartProducts") as string ) ?? [];
+      let cartProducts:any = getDataToLocalStorage("cartProducts") ??  []
 
       state.dataError = false
       const isItemExsist = cartProducts?.find(
@@ -55,7 +56,8 @@ const productSlice: any = createSlice({
           0
         );
 
-        localStorage.setItem("cartProducts",  JSON.stringify(temp_arr) );
+        
+         saveDataToLocalStorage("cartProducts",temp_arr)
 
       } else {
         let IncreaseExsisting = isItemExsist;
@@ -70,15 +72,15 @@ const productSlice: any = createSlice({
           0
         );
 
-        localStorage.setItem("cartProducts", JSON.stringify(cartProducts) );
 
-
+        saveDataToLocalStorage("cartProducts",cartProducts);
+        
       }
     },
 
     removeFromCart: (state: any, action) => {
 
-      let cartProducts = JSON.parse( localStorage.getItem("cartProducts") as string ) ?? []
+      let cartProducts:any = getDataToLocalStorage("cartProducts") ??  []
 
       if (cartProducts !== null) {
 
@@ -93,7 +95,16 @@ const productSlice: any = createSlice({
         );
         // state.cartCount = filteredArr.length;
 
-        localStorage.setItem("cartProducts", JSON.stringify(filteredArr) );
+
+        if(cartProducts.length < 2){
+
+          localStorage.removeItem("cartProducts");
+          
+        }else{
+
+          saveDataToLocalStorage("cartProducts",filteredArr);
+        }
+
 
 
       } else {
@@ -104,7 +115,7 @@ const productSlice: any = createSlice({
     },
 
     decreaseItemQuantity: (state: any, action: any) => {
-      let cartProducts = JSON.parse( localStorage.getItem("cartProducts") as string ) ?? [];
+      let cartProducts:any = getDataToLocalStorage("cartProducts") ??  []
 
 
       if (cartProducts !== null) {
@@ -114,11 +125,11 @@ const productSlice: any = createSlice({
           (item: any, i: number) => item?.id === action?.payload?.id
         ) ?? {}
 
-        let IncreaseExsisting = isItemExsist ?? {}
+        let DecreaseExsisting = isItemExsist ?? {}
 
-        IncreaseExsisting.quantity = IncreaseExsisting?.quantity - 1 ?? 0
+        DecreaseExsisting.quantity = DecreaseExsisting?.quantity - 1 ?? 0
 
-        cartProducts[action.payload] = IncreaseExsisting ?? {}
+        cartProducts[action.payload] = DecreaseExsisting ?? {}
 
         state.cartItems = cartProducts ?? [];
 
@@ -127,7 +138,8 @@ const productSlice: any = createSlice({
           0
         );
 
-        localStorage.setItem("cartProducts", JSON.stringify(cartProducts));
+
+        saveDataToLocalStorage("cartProducts",cartProducts);
 
       } else {
 
@@ -154,7 +166,7 @@ const productSlice: any = createSlice({
       state.cartItems = [];
       state.cartCount = 0;
       
-      let cartProducts = JSON.parse( localStorage.getItem("cartProducts") as string) ?? []
+      let cartProducts:any = getDataToLocalStorage("cartProducts") ??  [];
 
       if(cartProducts!== null){
 

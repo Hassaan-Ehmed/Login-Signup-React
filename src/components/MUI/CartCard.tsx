@@ -1,36 +1,23 @@
+import CloseIcon from '@mui/icons-material/Close';
 import { Card as MUICard } from "@mui/material";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
+import ButtonGroup from '@mui/material/ButtonGroup';
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
+import { Bounce } from "react-toastify";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { addToCart, decreaseItemQuantity, removeFromCart } from "../../redux/slices/products";
-import { Bounce, toast, Zoom } from "react-toastify";
-import { store } from "../../redux/store";
-import ButtonGroup from '@mui/material/ButtonGroup';
-import Badge from '@mui/material/Badge';
-import CloseIcon from '@mui/icons-material/Close';
 
 
 
 import {
-  errorNotification,
-  notificationTypes,
-  successNotification,
-  warningNotification,
+  successNotification
 } from "../../utils/Notifications";
-import { useState } from "react";
 
 
-const bull = (
-  <Box
-    component="span"
-    sx={{ display: "inline-block", mx: "2px", transform: "scale(0.8)" }}
-  >
-    •
-  </Box>
-);
+
 
 export default function CartCard({
   key,
