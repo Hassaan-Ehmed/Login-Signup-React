@@ -21,7 +21,7 @@ export default function Products({ foodsArray, forCart }: any) {
   });
 
   return (
-    <Box sx={{ flexGrow: 1 }}>
+    <Box sx={{ flexGrow: 1 , backgroundColor:"#F5F5DC"}}>
       {categories.map((category, categoryIndex) => (
         <div key={categoryIndex}>
           {/* Category heading */}
@@ -36,6 +36,7 @@ style={{
    justifyContent:"center",
    alignItems:"center",
    margin: "50px 0 10px 0",
+ 
 
    
    }}>

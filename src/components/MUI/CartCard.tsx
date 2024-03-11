@@ -1,5 +1,5 @@
 import CloseIcon from '@mui/icons-material/Close';
-import { Card as MUICard } from "@mui/material";
+import { CardMedia, Card as MUICard } from "@mui/material";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import ButtonGroup from '@mui/material/ButtonGroup';
@@ -62,6 +62,7 @@ export default function CartCard({
   let formatedQuantity = new Intl.NumberFormat("en-US").format(foodPacket.quantity);
   return (
     <MUICard sx={{ backgroundColor: "#F5F5DC",cursor:"pointer" }} key={key}>
+
       <CardContent sx={{ maxWidth:'30vw'}}>
       
        {forCart ? (<Typography variant="h5" component="div" 

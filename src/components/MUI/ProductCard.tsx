@@ -1,30 +1,19 @@
-import { Grid, Card as MUICard } from "@mui/material";
+import { useEffect, useState } from "react";
+import CloseIcon from "@mui/icons-material/Close";
+import { CardMedia, Card as MUICard } from "@mui/material";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
+import ButtonGroup from "@mui/material/ButtonGroup";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
+import { Bounce } from "react-toastify";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
-import {
-  addToCart,
-  decreaseItemQuantity,
-  removeFromCart,
-} from "../../redux/slices/products";
-import { Bounce, toast, Zoom } from "react-toastify";
-import { store } from "../../redux/store";
-import ButtonGroup from "@mui/material/ButtonGroup";
-import Badge from "@mui/material/Badge";
-import CloseIcon from "@mui/icons-material/Close";
-
-import {
-  errorNotification,
-  notificationTypes,
-  successNotification,
-  warningNotification,
-} from "../../utils/Notifications";
-import { useEffect, useMemo, useState } from "react";
-import { Decrypt } from "../../utils/Incryption";
+import {  addToCart,  decreaseItemQuantity,removeFromCart, handleClickOpen} from "../../redux/slices/products";
+import {  successNotification} from "../../utils/Notifications";
 import { getDataToLocalStorage } from "../../utils/localstorage";
+import pizzaImage from '../../images/productImages/4meat-351x200-min.png'
+import MUIDialog from "./MUIDialog";
 
 const bull = (
   <Box
@@ -47,7 +36,11 @@ export default function ProductCard({
 
   const [currentQuantity, setQuantity] = useState(0);
   const [itemPresent, setItemPresent] = useState(false);
+  // const [isModalOpen,setIsModalOpen]  = useState(false);
 
+  // Parent Own Now!
+  // const [open, setOpen] = useState(false);
+  
   useEffect(() => {
     
     let cartProducts:any = getDataToLocalStorage("cartProducts") ?? [];
@@ -113,11 +106,37 @@ export default function ProductCard({
 
 
 
+// const handleModal=()=>{
+  
+//   setIsModalOpen(true);
+
+// }
+
+
+// const handleClose = () => {
+//   setOpen(false);
+
+//   };
+
+
+
+
 
   let formatedQuantity  = new Intl.NumberFormat("en-US").format(currentQuantity) ?? 0
   return (
 
-    <MUICard sx={{ backgroundColor: "#F5F5DC",cursor:"pointer"}} key={key}>
+    <MUICard sx={{ backgroundColor: "white",cursor:"pointer",boxShadow: "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px"}} key={key} >
+
+<MUIDialog />
+
+<CardMedia
+        sx={{ height: 140 }}
+        image={pizzaImage}
+        title="Pizza Image"
+
+        onClick={()=>dispatch(handleClickOpen())}
+      />
+
       <CardContent sx={{ maxWidth:'30vw'}}>
         {forCart ? (
           <Typography

@@ -19,7 +19,8 @@ const productSlice: any = createSlice({
     cartItems: [],
     userFullName: "",
     productData: products,
-    dataError: false
+    dataError: false,
+    isOpen:true
   },
   name: "productSlice",
   reducers: {
@@ -185,7 +186,19 @@ const productSlice: any = createSlice({
       }
 
 
+    },
+
+    handleClickOpen : (state:any,action:any) => {
+        
+      state.isOpen = true
+    
+    },
+    
+    handleClose : (state:any,action:any) => {
+      state.isOpen = false
+    
     }
+    
   },
 });
 
@@ -198,5 +211,7 @@ export const {
   setCartCount,
   removeFromCart,
   decreaseItemQuantity,
-  clearAllItems
+  clearAllItems,
+  handleClickOpen,
+  handleClose
 } = productSlice.actions;
