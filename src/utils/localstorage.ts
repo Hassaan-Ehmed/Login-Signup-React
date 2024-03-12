@@ -11,7 +11,8 @@ export const saveDataToLocalStorage = (key: string, data: any) => {
     // "[{{}}]"
     let encrypted_data = AES.encrypt(str_parsed_data, seceretKey).toString();
     // 983217jkhsadp982h3e as string
-    
+
+    // localStorage.setItem(key, str_parsed_data);
     localStorage.setItem(key, encrypted_data);
   } catch (error) {
     console.log(error);
@@ -30,8 +31,8 @@ export const getDataToLocalStorage = (key: string) => {
       return null;
     }
     decrypt_data = JSON.parse(decrypt_data);
-    console.log("decrypt_data",decrypt_data)
-    
+    console.log("decrypt_data", decrypt_data);
+   
     return decrypt_data;
   } catch (error) {
     console.log(error);

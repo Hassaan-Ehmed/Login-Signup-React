@@ -8,10 +8,10 @@ import { Bounce, Flip } from "react-toastify";
 import { products } from "../../../data/data";
 import { useAppDispatch } from "../../hooks";
 import { Decrypt, Encrypt } from "../../../utils/Incryption";
-import { getDataToLocalStorage, saveDataToLocalStorage } from "../../../utils/localstorage";
-
-
-
+import {
+  getDataToLocalStorage,
+  saveDataToLocalStorage,
+} from "../../../utils/localstorage";
 
 const productSlice: any = createSlice({
   initialState: {
@@ -20,16 +20,15 @@ const productSlice: any = createSlice({
     userFullName: "",
     productData: products,
     dataError: false,
-    isOpen:true
+    isOpen: false,
+    selected_item: null,
   },
   name: "productSlice",
   reducers: {
-
-
     addToCart: (state: any, action: any) => {
-      let cartProducts:any = getDataToLocalStorage("cartProducts") ??  []
+      let cartProducts: any = getDataToLocalStorage("cartProducts") ?? [];
 
-      state.dataError = false
+      state.dataError = false;
       const isItemExsist = cartProducts?.find(
         (item: any) => item?.id === action?.payload?.id
       );
@@ -57,9 +56,7 @@ const productSlice: any = createSlice({
           0
         );
 
-        
-         saveDataToLocalStorage("cartProducts",temp_arr)
-
+        saveDataToLocalStorage("cartProducts", temp_arr);
       } else {
         let IncreaseExsisting = isItemExsist;
 
@@ -73,64 +70,53 @@ const productSlice: any = createSlice({
           0
         );
 
-
-        saveDataToLocalStorage("cartProducts",cartProducts);
-        
+        saveDataToLocalStorage("cartProducts", cartProducts);
       }
     },
 
     removeFromCart: (state: any, action) => {
-
-      let cartProducts:any = getDataToLocalStorage("cartProducts") ??  []
+      let cartProducts: any = getDataToLocalStorage("cartProducts") ?? [];
 
       if (cartProducts !== null) {
-
         state.dataError = false;
 
-        const filteredArr = cartProducts?.filter((item: any) => action.payload.id !== item.id) ?? []
+        const filteredArr =
+          cartProducts?.filter((item: any) => action.payload.id !== item.id) ??
+          [];
 
-        state.cartItems = filteredArr ?? []
+        state.cartItems = filteredArr ?? [];
         state.cartCount = filteredArr?.reduce(
           (a: any, b: any) => a + b?.quantity,
           0
         );
         // state.cartCount = filteredArr.length;
 
-
-        if(cartProducts.length < 2){
-
+        if (cartProducts.length < 2) {
           localStorage.removeItem("cartProducts");
-          
-        }else{
-
-          saveDataToLocalStorage("cartProducts",filteredArr);
+        } else {
+          saveDataToLocalStorage("cartProducts", filteredArr);
         }
-
-
-
       } else {
         state.dataError = true;
       }
-
-
     },
 
     decreaseItemQuantity: (state: any, action: any) => {
-      let cartProducts:any = getDataToLocalStorage("cartProducts") ??  []
-
+      let cartProducts: any = getDataToLocalStorage("cartProducts") ?? [];
 
       if (cartProducts !== null) {
         state.dataError = false;
 
-        const isItemExsist = cartProducts?.find(
-          (item: any, i: number) => item?.id === action?.payload?.id
-        ) ?? {}
+        const isItemExsist =
+          cartProducts?.find(
+            (item: any, i: number) => item?.id === action?.payload?.id
+          ) ?? {};
 
-        let DecreaseExsisting = isItemExsist ?? {}
+        let DecreaseExsisting = isItemExsist ?? {};
 
-        DecreaseExsisting.quantity = DecreaseExsisting?.quantity - 1 ?? 0
+        DecreaseExsisting.quantity = DecreaseExsisting?.quantity - 1 ?? 0;
 
-        cartProducts[action.payload] = DecreaseExsisting ?? {}
+        cartProducts[action.payload] = DecreaseExsisting ?? {};
 
         state.cartItems = cartProducts ?? [];
 
@@ -139,14 +125,10 @@ const productSlice: any = createSlice({
           0
         );
 
-
-        saveDataToLocalStorage("cartProducts",cartProducts);
-
+        saveDataToLocalStorage("cartProducts", cartProducts);
       } else {
-
         state.dataError = true;
       }
-
     },
 
     setItemsToStore: (state: any, action: any) => {
@@ -162,43 +144,35 @@ const productSlice: any = createSlice({
       state.cartCount = action.payload;
     },
 
-    clearAllItems:(state:any,action:any)=>{
-      
+    clearAllItems: (state: any, action: any) => {
       state.cartItems = [];
       state.cartCount = 0;
-      
-      let cartProducts:any = getDataToLocalStorage("cartProducts") ??  [];
 
-      if(cartProducts!== null){
+      let cartProducts: any = getDataToLocalStorage("cartProducts") ?? [];
 
+      if (cartProducts !== null) {
         localStorage.removeItem("cartProducts");
-        
+
         setTimeout(() => {
-          
-        successNotification({
-          msg:"All items removed successfully!",
-          position:"bottom-right",
-          time:750,
-          transitionName:Flip
-        });
-
-      }, 500);
+          successNotification({
+            msg: "All items removed successfully!",
+            position: "bottom-right",
+            time: 750,
+            transitionName: Flip,
+          });
+        }, 500);
       }
-
-
     },
 
-    handleClickOpen : (state:any,action:any) => {
-        
-      state.isOpen = true
-    
+    handleClickOpen: (state: any, action: any) => {
+
+      state.selected_item = action.payload;
+      // state.isOpen = true;
     },
-    
-    handleClose : (state:any,action:any) => {
-      state.isOpen = false
-    
-    }
-    
+
+    handleClose: (state: any, action: any) => {
+      
+    state.selected_item = null    },
   },
 });
 
@@ -213,5 +187,5 @@ export const {
   decreaseItemQuantity,
   clearAllItems,
   handleClickOpen,
-  handleClose
+  handleClose,
 } = productSlice.actions;

@@ -48,15 +48,15 @@ let cartProducts:any = getDataToLocalStorage("cartProducts");
 let isToken = getDataToLocalStorage("userToken");
 
 
-if((!userInfoBox) || (!cartProducts) || (!isToken)){
+// if((!userInfoBox) || (!cartProducts) || (!isToken)){
 
 
-localStorage.clear();
+// localStorage.clear();
 
-navigate("/login")
+// navigate("/login")
 
 
-}else{
+// }else{
   
 
 
@@ -88,7 +88,7 @@ saveDataToLocalStorage("cartProducts",[])
     );
     dispatch(setCartCount(currentQuantity));
   }
-}
+
   }, []);
 
   return (

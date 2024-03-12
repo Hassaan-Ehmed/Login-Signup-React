@@ -1,40 +1,49 @@
 import React, { useRef, useState } from 'react'
-import pizzaOverlayBlue from '../../images/blue-pizza-overlay.webp'
-const MiniSlider = () => {
-
-//     const [isDragging, setIsDragging] = useState(false);
-//   const [startX, setStartX] = useState(0);
-//   const [scrollLeft, setScrollLeft] = useState(0);
-//   const sliderRef = useRef<any>(null);
+import miniSliderPizza from '../../images/mini-slider-pizza.png'
+import pizzaBG from '../../images/pizzaBG.jpeg'
+import { Divider, Grid } from '@mui/material'
+import '../../App.css'
 
 
-//   const handleMouseDown = (e:any) => {
-//     setIsDragging(true);
-//     setStartX(e.pageX - sliderRef.current.offsetLeft);
-//     setScrollLeft(sliderRef.current.scrollLeft);
-//   };
+const MiniSlider = ({cater,isEdge}:any) => {
 
-//   const handleMouseMove = (e:any) => {
-//     if (!isDragging) return;
-//     const x = e.pageX - sliderRef.current.offsetLeft;
-//     const walk = x - startX;
-//     sliderRef.current.scrollLeft = scrollLeft - walk;
-//   };
+  
+const Slide = ()=>{
 
-//   const handleMouseUp = () => {
-//     setIsDragging(false);
-//   };
-
-
-
-  return (
-    <div>
+  if(isEdge){
+    
+    return (
+      <Grid item container style={{width:"30%",height:"6vh",
+       borderRadius:"10px",cursor:"pointer",display:"flex",justifyContent:"space-around",position:"relative",overflow:"hidden",backgroundColor:"white"}}
       
-      <h3>SELECT SIZE</h3>
+       >
+      
+  
+        <img src={pizzaBG} style={{width:"100%",height:'100%',objectFit:"cover",position:'absolute',opacity:0.56}} />
+      
+        <p style={{fontSize:"1.6vh",color:"black", fontWeight:"bold",position:"absolute",top:-15,left:10}}>Classical Crust</p>
+      
+  
+      
+      </Grid>
+      )
 
-
-
-<div style={{width:"100%",height:"110px", display:"flex",justifyContent:"center", alignItems:"center",overflow:"hidden",position: "relative"}}
+  }else{
+return (
+    <Grid item container style={{border:"1.5px solid #0276AE",width:"30%",height:"6vh",
+     borderRadius:"10px",cursor:"pointer",display:"flex",justifyContent:"space-around",position:"relative",paddingTop:'12px'}}
+     >
+  
+      <img src={miniSliderPizza} style={{width:"100%",height:'100%',objectFit:"contain",}} />
+    
+      <p style={{fontSize:"1.5vh",color:"black",position:"absolute",top:-15,left:10}}>Classical Crust</p>
+      
+    </Grid>
+    )    
+  }
+   
+        
+}
 
 // ref={sliderRef}
 // onMouseDown={handleMouseDown}
@@ -42,37 +51,30 @@ const MiniSlider = () => {
 // onMouseUp={handleMouseUp}
 // onMouseLeave={handleMouseUp}
 
+  return (
+
+
+    <>
+    
+<Divider variant="fullWidth" />
+
+      <Grid item sx={{fontSize:"1vw",fontWeight:"bold",color:"#585858",paddingLeft:"1.5vh"}}>SELECT {cater ?? "Category"}</Grid>
+
+
+<Grid item container 
+    // 
+    sx={{width:"100%",height:"100px", display:"flex",justifyContent:"center",gap:"10px", alignItems:"center",overflowX:"scroll"}}
+    
+
+
 >
 
+{[...Array(4)].map(() => ( <Slide/> ))}
 
-<div style={{border:"1.5px solid #0276AE",width:"60%",height:"70%",display:"flex",justifyContent:"space-around",
-alignItems:'center', borderRadius:"20px",cursor:"pointer"}}>
+</Grid>
 
+    </>
 
-<div style={{width:"40%",height:"85%"}}>
-  
-
-  <img src={pizzaOverlayBlue} style={{width:"100%",height:'100%'}} />
-
-
-</div>
-<div style={{width:'40%',height:"90%",display:"flex",justifyContent:"center",
-alignItems:'center'}}>
-
-<p style={{fontSize:"15px"}}><span style={{fontWeight:"bold",fontSize:"20px"}}>Small</span> 14.40$</p>
-
-</div>
-
-
-</div>
-{/* <div style={{backgroundColor:"orange",width:"60%",height:"70%",borderRadius:"20px",cursor:"grab"}}></div>
-<div style={{backgroundColor:"orange",width:"60%",height:"70%",borderRadius:"20px",cursor:"grab"}}></div>
-<div style={{backgroundColor:"orange",width:"60%",height:"70%",borderRadius:"20px",cursor:"grab"}}></div> */}
-
-</div>
-
-
-    </div>
   )
 }
 
