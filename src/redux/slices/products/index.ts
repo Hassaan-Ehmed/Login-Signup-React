@@ -170,6 +170,62 @@ const productSlice: any = createSlice({
       // state.isOpen = true;
     },
 
+    handleModalItemAdd  : (state:any,action:any)=>{
+
+
+      let cartProducts: any = getDataToLocalStorage("cartProducts") ?? [];
+
+      state.dataError = false;
+
+      const isItemExsist = cartProducts?.find(
+        (item: any) => item?.id === action?.payload?.id
+      );
+
+      if (!isItemExsist) {
+        let newObj = { ...action?.payload };
+
+        newObj.quantity = action?.payload?.quantity + 1;
+
+        successNotification({
+          msg: "Item added successfully!",
+          position: "bottom-right",
+          time: 500,
+          transitionName: Bounce,
+        });
+
+        let temp_arr = cartProducts;
+
+        temp_arr.push(newObj);
+
+        state.cartItems = temp_arr;
+
+        state.cartCount = temp_arr?.reduce(
+          (a: any, b: any) => a + b.quantity,
+          0
+        );
+
+        saveDataToLocalStorage("cartProducts", temp_arr);
+      } else {
+
+        
+        let IncreaseExsisting = isItemExsist;
+
+        IncreaseExsisting.quantity = IncreaseExsisting?.quantity + 1;
+
+        cartProducts[action.payload] = IncreaseExsisting;
+
+        state.cartItems = cartProducts ?? [];
+        state.cartCount = cartProducts?.reduce(
+          (a: any, b: any) => a + b.quantity ?? 0,
+          0
+        );
+
+        saveDataToLocalStorage("cartProducts", cartProducts);
+      }
+
+
+    },
+
     handleClose: (state: any, action: any) => {
       
     state.selected_item = null    },

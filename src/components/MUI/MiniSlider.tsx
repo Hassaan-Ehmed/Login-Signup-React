@@ -3,40 +3,55 @@ import miniSliderPizza from '../../images/mini-slider-pizza.png'
 import pizzaBG from '../../images/pizzaBG.jpeg'
 import { Divider, Grid } from '@mui/material'
 import '../../App.css'
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 
 
-const MiniSlider = ({cater,isEdge}:any) => {
+const MiniSlider = ({cater,isEdge,dataPacket}:any) => {
 
+  const [data,setData] = useState(dataPacket)
   
-const Slide = ()=>{
+
+
+const Slide = ({packet,indexNum}:any)=>{
 
   if(isEdge){
     
-    return (
-      <Grid item container style={{width:"30%",height:"6vh",
+ return (
+
+      <div  style={{width:"500px",height:"6vh",
        borderRadius:"10px",cursor:"pointer",display:"flex",justifyContent:"space-around",position:"relative",overflow:"hidden",backgroundColor:"white"}}
-      
+
+       onClick={()=>handleCheck(indexNum)}
        >
       
   
-        <img src={pizzaBG} style={{width:"100%",height:'100%',objectFit:"cover",position:'absolute',opacity:0.56}} />
+        <img src={pizzaBG} style={{width:"100%",height:'100%',objectFit:"cover",position:'absolute'}} />
       
-        <p style={{fontSize:"1.6vh",color:"black", fontWeight:"bold",position:"absolute",top:-15,left:10}}>Classical Crust</p>
+        <p style={{fontSize:"1.6vh",color:"white", fontWeight:"bold",position:"absolute",top:-15,left:10}}>{packet.type}
+        
+        {packet.check &&  <CheckCircleIcon  sx={{fontSize:"1.8vh",color:"green",zIndex:2,position:"absolute",top:6,left:90}}/> }
+        </p>
       
   
       
-      </Grid>
-      )
+      </div>
+        )
 
   }else{
 return (
-    <Grid item container style={{border:"1.5px solid #0276AE",width:"30%",height:"6vh",
-     borderRadius:"10px",cursor:"pointer",display:"flex",justifyContent:"space-around",position:"relative",paddingTop:'12px'}}
-     >
+  <Grid item container style={{border:"1.2px solid #d1d1d1",width:"30%",height:"6vh",
+  borderRadius:"10px",cursor:"pointer",display:"flex",justifyContent:"space-around",position:"relative",paddingTop:'12px',overflow:"hidden"}}
+
+  onClick={()=>handleCheck(indexNum)}
+  >
   
       <img src={miniSliderPizza} style={{width:"100%",height:'100%',objectFit:"contain",}} />
     
-      <p style={{fontSize:"1.5vh",color:"black",position:"absolute",top:-15,left:10}}>Classical Crust</p>
+      <p style={{fontSize:"1.5vh",color:"black",position:"absolute",top:-15,left:10,paddingTop:"5px",display:"flex",justifyContent:"space-between",alignItems:"center"}}>{packet.type}
+      
+        {packet.check &&  <CheckCircleIcon  sx={{fontSize:"1.8vh",color:"green",zIndex:2,position:"absolute",top:6,left:90}}/> }
+
+      </p>
       
     </Grid>
     )    
@@ -45,33 +60,37 @@ return (
         
 }
 
-// ref={sliderRef}
-// onMouseDown={handleMouseDown}
-// onMouseMove={handleMouseMove}
-// onMouseUp={handleMouseUp}
-// onMouseLeave={handleMouseUp}
 
+const handleCheck=(indexNum:number)=>{
+
+
+setData((prevData:any) => {
+  const updatedData = prevData.map((item:any, index:any) => ({
+    ...item,
+    check: index === indexNum
+  }));
+  return updatedData;
+});
+
+}
   return (
 
-
-    <>
+   <>
     
 <Divider variant="fullWidth" />
 
-      <Grid item sx={{fontSize:"1vw",fontWeight:"bold",color:"#585858",paddingLeft:"1.5vh"}}>SELECT {cater ?? "Category"}</Grid>
+      <Grid item sx={{fontSize:"0.8vw",fontWeight:"bold",color:"#585858",paddingLeft:"1.5vh",fontFamily:"sans-serif"}}>SELECT {cater ?? "Category"}</Grid>
 
 
-<Grid item container 
-    // 
-    sx={{width:"100%",height:"100px", display:"flex",justifyContent:"center",gap:"10px", alignItems:"center",overflowX:"scroll"}}
+<div 
+    style={{width:"100%",height:"100px", display:"flex",justifyContent:"center",gap:"10px", alignItems:"center"}}
     
-
-
 >
 
-{[...Array(4)].map(() => ( <Slide/> ))}
+{data.map((packet:any,indexNum:number) => ( <Slide key={indexNum} packet={packet} indexNum={indexNum} /> ))}
 
-</Grid>
+
+</div>
 
     </>
 

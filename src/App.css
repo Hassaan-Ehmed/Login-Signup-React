@@ -72,3 +72,5 @@ height: 80vh;
 .scroll {
   transform: translateX(calc(-100% - 10px)); /* Adjust the distance to scroll */
 }
+
+

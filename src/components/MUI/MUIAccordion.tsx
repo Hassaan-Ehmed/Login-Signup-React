@@ -15,71 +15,77 @@ import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import { Checkbox, FormControlLabel, Grid } from '@mui/material';
 import { red } from '@mui/material/colors';
 
+const toppings = {
 
+    standard :[
 
-
-
-function createData(
-  name: string,
-  calories: number,
-  fat: number,
-  carbs: number,
-  protein: number,
-  price: number,
-) {
-  return {
-    name,
-    calories,
-    fat,
-    carbs,
-    protein,
-    price,
-    history: [
-
-      {check : <FormControlLabel control={<Checkbox sx={{
-        color: red[700],
-        '&.Mui-checked': {
-          color: red[700],
-        },
-      }} />} label="Meatballs" />},
-
-
-    {check : <FormControlLabel control={<Checkbox  sx={{
-        color: red[700],
-        '&.Mui-checked': {
-          color: red[700],
-        },
-      }}/>} label="Steak" />},
-    
-    {check : <FormControlLabel control={<Checkbox  sx={{
-        color: red[700],
-        '&.Mui-checked': {
-          color: red[700],
-        },
-      }}/>} label="Pepporini" />},
-    
-    {check : <FormControlLabel control={<Checkbox  sx={{
-        color: red[700],
-        '&.Mui-checked': {
-          color: red[700],
-        },
-      }}/>} label="Sause" />},
-    
-    {check :  <FormControlLabel control={<Checkbox  sx={{
-        color: red[700],
-        '&.Mui-checked': {
-          color: red[700],
-        },
-      }}/>} label="Fries" />},
-    
-    {check : <FormControlLabel control={<Checkbox  sx={{
-        color: red[700],
-        '&.Mui-checked': {
-          color: red[700],
-        },
-      }}/>} label="Miyo" />},
-      
+        "Meatballs",
+        "Miyo",
+        "Pepporani",
+        "Sauce",
+        "Fries",
+        "Steak",
     ],
+    
+    extra :[
+        
+        "Meats",
+    
+        "Mangal",
+    
+        "Beef ",
+    
+        "Chicken Breast",
+    
+        "Beef Meat",
+    
+        "Tuna Fish",
+    
+        "Chicken",
+    
+        "Sauces",
+    
+        "Mayonnaise",
+    
+        "BBQ Sauce",
+    
+        "Vegetables",
+    
+        "Roasted B",
+    
+        "Pepper Flakes",
+    
+        "Jalapeno",
+    
+        "Peppers",
+    
+        "Mushrooms",
+    
+        "Olives",
+    
+        "Sweetcorn",
+    
+        "Tomatoes",
+    
+        "Pineapple",
+    
+        "Onions",
+    
+        "Herbs",
+    
+        "Sesame",
+    
+        "Oregano",
+    
+    
+      ]
+    
+    }
+
+
+function createData(toppings:any) {
+  return {
+    target: toppings
   };
 }
 
@@ -90,24 +96,20 @@ function Row(props: { row: ReturnType<typeof createData> }) {
   return (
     <React.Fragment>
       <TableRow sx={{ '& > *': { borderBottom: 'unset' } }}>
-        <TableCell sx={{display:"flex", justifyContent:"flex-start",alignItems:"center"}}>
+        <TableCell sx={{display:"flex", justifyContent:"space-between",alignItems:"center",cursor:"pointer"}}    onClick={() => setOpen(!open)}>
+          <p style={{color:"#585858",fontWeight:"bold",alignSelf:"flex-end"}}>{row.target[0] === "Meats" ? 'EXTRA' : 'STANDARD'} TOPPINGS</p>
           <IconButton
             aria-label="expand row"
             size="small"
-            onClick={() => setOpen(!open)}
+         
 
           >
             {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
           </IconButton>
-          <p style={{color:"#585858",fontWeight:"bold",alignSelf:"flex-end"}}>STANDARD TOPPINGS</p>
+
+        
         </TableCell>
-        {/* <TableCell component="th" scope="row">
-          {row.name}
-        </TableCell> */}
-        {/* <TableCell align="right">{row.calories}</TableCell>
-        <TableCell align="right">{row.fat}</TableCell>
-        <TableCell align="right">{row.carbs}</TableCell>
-        <TableCell align="right">{row.protein}</TableCell> */}
+      
       </TableRow>
       <TableRow>
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
@@ -117,14 +119,21 @@ function Row(props: { row: ReturnType<typeof createData> }) {
               <Table size="small" aria-label="purchases">
                
                 <Grid container columnSpacing={2} rowSpacing={2}>
-                  {row.history.map((historyRow:any) => (
-                    // <TableRow key={historyRow.date ?? 0}>
-                    //   <TableCell component="th" scope="row">
+                  {row?.target?.map((topping:any) => (
+                    
+                      <Grid item xl={4} sx={{display:"flex",alignItems:"center"}}>
+                        <TableCell align="right" sx={{width:"30%"}}>
+                        
+              
+                        <FormControlLabel control={<Checkbox defaultChecked  sx={{
+                              color: red[700],
+                              '&.Mui-checked': {
+                                     color: red[700],
+                                                   },
+                                 }}/>} label={topping} />
                       
-                      <Grid item xl={4}><TableCell align="right" sx={{width:"30%",}}>{historyRow.check}</TableCell></Grid>
-                    //   </TableCell>
-                    //   {/* <TableCell>{historyRow.customerId}</TableCell>  */}
-    
+                      </TableCell></Grid>
+                    
                     
                   ))}
                 </Grid>
@@ -138,8 +147,9 @@ function Row(props: { row: ReturnType<typeof createData> }) {
 }
 
 const rows = [
-  createData('Frozen yoghurt', 159, 6.0, 24, 4.0, 3.99),
-  createData('Ice cream sandwich', 237, 9.0, 37, 4.3, 4.99),
+  createData(toppings.standard),
+  createData(toppings.extra),
+
  
 ];
 
@@ -147,19 +157,10 @@ export default function MUIAccordion() {
   return (
     <TableContainer component={Paper}>
       <Table aria-label="collapsible table">
-        {/* <TableHead>
-          <TableRow>
-            <TableCell />
-            <TableCell>Dessert (100g serving)</TableCell>
-            <TableCell align="right">Calories</TableCell>
-            <TableCell align="right">Fat&nbsp;(g)</TableCell>
-            <TableCell align="right">Carbs&nbsp;(g)</TableCell>
-            <TableCell align="right">Protein&nbsp;(g)</TableCell>
-          </TableRow>
-        </TableHead> */}
+{/*  */}
         <TableBody>
-          {rows.map((row) => (
-            <Row key={row.name} row={row} />
+          {rows.map((row,indexNum) => (
+            <Row key={indexNum}  row={row} />
           ))}
         </TableBody>
       </Table>

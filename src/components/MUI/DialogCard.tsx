@@ -9,7 +9,7 @@ import Typography from "@mui/material/Typography";
 import SkipPreviousIcon from "@mui/icons-material/SkipPrevious";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import SkipNextIcon from "@mui/icons-material/SkipNext";
-import pizzaImage from "../../images/productImages/4meat-351x200-min.png";
+import pizzaImage from "../../images/productImages/pizza1.webp";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import { Button, ButtonGroup, Divider, Grid } from "@mui/material";
 import MiniPacket from "./MiniPacket";
@@ -20,14 +20,17 @@ import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { Bounce } from "react-toastify";
 import { successNotification } from "../../utils/Notifications";
 import { getDataToLocalStorage } from "../../utils/localstorage";
+import '../../App.css'
+
 
 export default function DialogCard({selectedItem}:any) {
-  const theme = useTheme();
 
+    const theme = useTheme();
 
-  const storeState: any = useAppSelector((state) => state?.products);
+    const storeState: any = useAppSelector((state) => state?.products);
 
   const [currentQuantity, setQuantity] = useState(0);
+  const [counter, setCounter] = useState(1);
   const [itemPresent, setItemPresent] = useState(false);
 
   useEffect(() => {
@@ -48,7 +51,12 @@ export default function DialogCard({selectedItem}:any) {
 
 const dispatch = useAppDispatch()
 
-  const handleItemAdded = (selectedItem: any) => {
+
+
+const handleItemAdded = (selectedItem: any) => {
+
+
+
     dispatch(addToCart(selectedItem));
 
     // this success/warning msg have some conditons so i moved it to store in  addToCart  go store and check it
@@ -84,27 +92,108 @@ const dispatch = useAppDispatch()
     }
   };
 
+
+  const sizePacket = [
+    {
+        title:"Small",
+        text: selectedItem.price + (selectedItem.price / 4),
+        selected:false,
+      
+    },
+    {
+        title:"Medium",
+        text: selectedItem.price,
+        selected:true,
+    },
+    {
+        title:"Large",
+        text: selectedItem.price + (selectedItem.price / 2),
+        selected:false, 
+     }
+  ]
+
+  const slicePacket = [
+    {
+        title:"Regular Cut",
+        text:`${6} Slices`,
+        selected:true
+    },
+    {
+        title:"Double Cut",
+        text:`${12} Slices`,
+        selected:false
+    },
+    {
+        title:"Square Cut",
+        text:`${16} Slices`,
+        selected:false
+    }
+  ]
+
+const pizzaCrustPacket = [
+    {
+        type:"Classical Crust",
+        check:false
+    },
+    {
+        type:"Thin Crust",
+        check:false
+    },
+    {
+        type:"Thinnest Crust",
+        check:false
+    },
+    {
+        type:"Duplex Crust",
+        check:false
+    },
+]
+const pizzaEdgePacket = [
+    
+    {
+        type:"Mozzarella Edge",
+        check:false
+    },
+    {
+        type:"Sausage Edge",
+        check:false
+    },
+    {
+        type:"Parmesan Edge",
+        check:false
+    },
+    {
+        type:"Garlic Sauce Edge",
+        check:false
+    },
+];
+
+const handleCounter=(action:string,selectedItem:any)=>{
+
+if(action === "plus"){
+
+    setCounter( counter + 1);
+
+}else{
+    if(counter > 1)    setCounter( counter  - 1);
+}
+
+}
   return (
-    <Grid container columns={12} sx={{width:"100%",height:"100%"}}>
+    <Grid container columns={12}  sx={{width:"100%",height:"100%"}}>
 
       <Grid item xl={5} sx={{width:"100%",height:"100%",display:"flex",justifyContent:"flex-start", alignItems:"center",overflow:"hidden" ,boxShadow:"1px 0px 4px -3px"}}>
-        {/* <CardMedia
-          
-          component="img"
-          sx={{width:"100%", rotate:"270deg",bgcolor:"green"}}
-          image={pizzImage}
-          
-          alt="Pizza Image"
-          /> */}
+       
 
         <img
           src={pizzaImage}
           alt=""
           style={{
-            width: "32vw",
+            width: "30vw",
             height: "100%",
-            rotate: "270deg",
+            // rotate: "270deg",
             objectFit: "contain",
+            marginLeft:"40px"
           }}
         />
 
@@ -114,16 +203,17 @@ const dispatch = useAppDispatch()
 
       </Grid>
 
+{/* <div style={{margin:'0 5px'}}></div> */}
 
       <Grid item container xl={7} sx={{width:"100%",height:"100%",display:"flex", flexDirection:"column" , justifyContent:"flex-start", alignItems:"center",gap:"2vh",position:'relative'}}>
      
 
 
-<div className="fixedDiv" style={{position:"absolute",top:0}}>
+<div className="fixedDiv" style={{position:"absolute",top:0,right:0}}>
 
         {/* 1st row */}
         <Grid item container style={{ display:"flex",justifyContent:"space-between",alignItems:'center'}}>
-        <Grid item sx={{fontSize:"4vh",fontWeight:"bold"}}>{selectedItem.title}</Grid>
+        <Grid item sx={{fontSize:"4vh",fontWeight:"bold",paddingLeft:"10px"}}>{selectedItem.title}</Grid>
         {/* <Grid item><FavoriteIcon sx={{color:'lightgray',fontSize:"5vh"}}/></Grid> */}
         <span style={{fontSize:'2vh',color:"gray",paddingLeft:"10px"}}>{selectedItem.desc}</span>
         
@@ -134,13 +224,13 @@ const dispatch = useAppDispatch()
 
       {/* gap:"7.5vh", */}
 
-<Grid item container spacing={3}>
+<Grid item container >
+      
         <Grid item  xl={4} lg={4} md={6} sm={12} xs={12}  sx={{display:"flex",justifyContent:"center",alignItems:"center"}}>
             
-            <ButtonGroup variant="outlined" aria-label="Basic button group">
+            <ButtonGroup variant="outlined" aria-label="Basic button group"  sx={{marginLeft:"-30px"}}>
 
 <Button
-
 sx={{
        backgroundColor: "#FD001C",
        border:"none",
@@ -154,8 +244,9 @@ sx={{
         }
      }}
  
-     onClick={() => handleDecreaseQuanitity(selectedItem)}
+     onClick={() => handleCounter("minus",selectedItem)}
 
+disabled={counter === 1}
 >–</Button>
 
 <Button variant="outlined"  
@@ -167,9 +258,10 @@ sx={{
   outline: "none",
 }}
 >
-{currentQuantity}
+{counter}
 </Button>
-<Button sx={{
+<Button
+ sx={{
        backgroundColor: "#FD001C",
        border:"none",
        marginLeft:"30px",
@@ -179,13 +271,14 @@ sx={{
      
      
 
-     onClick={() => handleItemAdded(selectedItem)}
+     onClick={() => handleCounter("plus",selectedItem)}
+
 >+</Button>
             </ButtonGroup>
 
         </Grid>
 
-        <Grid item xl={4} lg={4} md={6} sm={12} xs={12} sx={{fontSize:'4vh',color:"#3b78ad",paddingLeft:"10px",display:"flex",justifyContent:"center",alignItems:'center'}}>${selectedItem.price}</Grid>
+        <Grid item xl={4} lg={4} md={6} sm={12} xs={12} sx={{fontSize:'4vh',fontWeight:"bold",color:"#0078AC",paddingLeft:"10px",display:"flex",justifyContent:"center",alignItems:'center'}}>${selectedItem.price}</Grid>
         
 
         <Grid item xl={4} lg={4} md={6} sm={12} xs={12} sx={{display:"flex",justifyContent:"center",alignItems:'center'}}>
@@ -214,22 +307,22 @@ sx={{
 
 </div>
 
-<div className="scrolledDiv" style={{overflow:'auto',marginTop:"20vh"}}>
+<div className="scrolledDiv" style={{width:'100%',marginTop:"20vh",overflow:"auto"}} >
 {/* 3rd row */}
 
 <Grid item container>
 
-<MiniPacket cater={'SLICE'} isEdge={false} />
 
-<MiniPacket  cater={'SIZE'}  isEdge={false} />
+<MiniPacket  cater={'SIZE'}  isEdge={false} dataPacket={sizePacket}/>
+
+<MiniPacket cater={'SLICE'} isEdge={false} dataPacket={slicePacket}/>
 
 
-
-
- <MiniSlider cater={'EDGE'} isEdge={true}/>
- <MiniSlider cater={'EDGE'} isEdge={false}/>
-
+ <MiniSlider cater={'CRUST'} isEdge={false} dataPacket={pizzaCrustPacket}/>
+ <MiniSlider cater={'EDGE'} isEdge={true} dataPacket={pizzaEdgePacket}/>
 <MUIAccordion/>
+
+
 </Grid>
 </div>
 
