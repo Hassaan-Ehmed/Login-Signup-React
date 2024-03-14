@@ -39,7 +39,7 @@ const Slide = ({packet,indexNum}:any)=>{
 
   }else{
 return (
-  <Grid item container style={{border:"1.2px solid #d1d1d1",width:"30%",height:"6vh",
+  <Grid item container style={{border:"1.2px solid #d1d1d1",width:"170px",height:"6vh",
   borderRadius:"10px",cursor:"pointer",display:"flex",justifyContent:"space-around",position:"relative",paddingTop:'12px',overflow:"hidden"}}
 
   onClick={()=>handleCheck(indexNum)}
@@ -79,11 +79,10 @@ setData((prevData:any) => {
     
 <Divider variant="fullWidth" />
 
-      <Grid item sx={{fontSize:"0.8vw",fontWeight:"bold",color:"#585858",paddingLeft:"1.5vh",fontFamily:"sans-serif"}}>SELECT {cater ?? "Category"}</Grid>
+      <div  style={{fontSize:"0.8vw",fontWeight:"bold",color:"#585858",paddingLeft:"1.5vh",fontFamily:"sans-serif"}}>SELECT {cater ?? "Category"}</div>
 
 
-<div 
-    style={{width:"100%",height:"100px", display:"flex",justifyContent:"center",gap:"10px", alignItems:"center"}}
+<div style={{width:"100%",height:"100px", display:"flex",justifyContent:"center",gap:"10px", alignItems:"center",overflowX:"auto"}}
     
 >
 

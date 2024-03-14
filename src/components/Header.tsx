@@ -11,7 +11,8 @@ export default function Header({ heading, img }: any) {
         alignItems: "center",
         margin: "15px 0 20px 0",
         position: "relative",
-        backgroundBlendMode:"overlay",
+        // backgroundBlendMode:"overlay",
+        
        
         
       }}
@@ -25,9 +26,9 @@ export default function Header({ heading, img }: any) {
           height: "100%",
           position: "absolute",
           zIndex: 1,
-          filter:"blur(0)",
-         
-          // opacity: 0.6
+          // filter:"blur(5px)",
+          // // backgroundBlendMode:"color-burn"
+          // opacity: 0.8
         
         }}
       />

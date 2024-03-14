@@ -40,21 +40,24 @@ export default function MUIDialog(props: any) {
   return (
   
       <Dialog open={storeState.selected_item?.id === id ? true : false} >
-        <DialogTitle id="customized-dialog-title">
+        <h2 id="customized-dialog-title" >
 
-          <IconButton
-            aria-label="close"
-            onClick={() => dispatch(handleClose())}
-            sx={{
+          <CloseIcon   sx={{
               position: "absolute",
               right: 8,
-              top: 15,
-              color: (theme) => theme.palette.grey[500],
+              top: 5,
+              cursor:"pointer"
             }}
+            
+            onClick={() => dispatch(handleClose())}
+            />
+            
+          {/* <IconButton
+            aria-label="close"
+           
           >
-            <CloseIcon />
-          </IconButton>
-        </DialogTitle>
+          </IconButton> */}
+        </h2>
         <DialogContent  sx={{padding:0, "& .MuiDialogContent-root": {
         paddingLeft:'0px',
         paddingRight:'0px'

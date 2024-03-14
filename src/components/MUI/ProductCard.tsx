@@ -17,7 +17,21 @@ import {
 } from "../../redux/slices/products";
 import { successNotification } from "../../utils/Notifications";
 import { getDataToLocalStorage } from "../../utils/localstorage";
-import pizzaImage from "../../images/productImages/4meat-351x200-min.png";
+import pizzaImage1 from "../../images/productImages/pizza1.webp";
+import pizzaImage2 from "../../images/productImages/pizza2.webp";
+import pizzaImage3 from "../../images/productImages/pizza3.png";
+import pizzaImage4 from "../../images/productImages/pizza4.png";
+import pizzaImage5 from "../../images/productImages/pizza5.png";
+import pizzaImage6 from "../../images/productImages/pizza6.png";
+import pizzaImage7 from "../../images/productImages/pizza7.png";
+import pizzaImage8 from "../../images/productImages/pizza8.png";
+import pizzaImage9 from "../../images/productImages/pizza9.webp";
+import pizzaImage10 from "../../images/productImages/pizza10.png";
+import pizzaImage11 from "../../images/productImages/pizza11.png";
+import pizzaImage12 from "../../images/productImages/pizza12.png";
+import pizzaImage13 from "../../images/productImages/pizza13.png";
+import pizzaImage14 from "../../images/productImages/pizza14.png";
+import pizzaImage15 from "../../images/productImages/pizza15.png";
 import MUIDialog from "./MUIDialog";
 
 const bull = (
@@ -38,6 +52,25 @@ export default function ProductCard({
 }: any) {
   const dispatch = useAppDispatch();
   const storeState: any = useAppSelector((state) => state?.products);
+
+// Only for Pizza!
+  const image = [
+    pizzaImage1,
+    pizzaImage2,
+    pizzaImage3,
+    pizzaImage4,
+    pizzaImage5,
+    pizzaImage6,
+    pizzaImage7,
+    pizzaImage8,
+    pizzaImage9,
+    pizzaImage10,
+    pizzaImage11,
+    pizzaImage12,
+    pizzaImage13,
+    pizzaImage14,
+    pizzaImage15
+  ]
 
   const [currentQuantity, setQuantity] = useState(0);
   const [itemPresent, setItemPresent] = useState(false);
@@ -90,8 +123,8 @@ export default function ProductCard({
     });
   }
 
-  console.log("foodPacket", foodPacket ?? {});
-  console.log("Current Quantity", currentQuantity ?? 0);
+  // console.log("foodPacket", foodPacket ?? {});
+  // console.log("Current Quantity", currentQuantity ?? 0);
 
   // const handleModal=()=>{
 
@@ -104,8 +137,10 @@ export default function ProductCard({
 
   //   };
 
-  let formatedQuantity =
-    new Intl.NumberFormat("en-US").format(currentQuantity) ?? 0;
+  let formatedQuantity = 
+  new Intl.NumberFormat("en-US").format(currentQuantity) ?? 0;
+
+
 
   return (
     <MUICard
@@ -118,12 +153,15 @@ export default function ProductCard({
     >
       <MUIDialog id={foodPacket?.id ?? null} />
 
-      <CardMedia
+     {'source' in foodPacket && ( <CardMedia
         sx={{ height: 140 }}
-        image={pizzaImage}
+        image={image[foodPacket.source]}
         title="Pizza Image"
         onClick={() => dispatch(handleClickOpen(foodPacket as any))}
+      
       />
+
+     )}
 
       <CardContent sx={{ maxWidth: "30vw" }}>
         {forCart ? (

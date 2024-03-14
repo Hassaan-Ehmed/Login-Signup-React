@@ -9,7 +9,21 @@ import Typography from "@mui/material/Typography";
 import { Bounce } from "react-toastify";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { addToCart, decreaseItemQuantity, removeFromCart } from "../../redux/slices/products";
-
+import pizzaImage1 from "../../images/productImages/pizza1.webp";
+import pizzaImage2 from "../../images/productImages/pizza2.webp";
+import pizzaImage3 from "../../images/productImages/pizza3.png";
+import pizzaImage4 from "../../images/productImages/pizza4.png";
+import pizzaImage5 from "../../images/productImages/pizza5.png";
+import pizzaImage6 from "../../images/productImages/pizza6.png";
+import pizzaImage7 from "../../images/productImages/pizza7.png";
+import pizzaImage8 from "../../images/productImages/pizza8.png";
+import pizzaImage9 from "../../images/productImages/pizza9.webp";
+import pizzaImage10 from "../../images/productImages/pizza10.png";
+import pizzaImage11 from "../../images/productImages/pizza11.png";
+import pizzaImage12 from "../../images/productImages/pizza12.png";
+import pizzaImage13 from "../../images/productImages/pizza13.png";
+import pizzaImage14 from "../../images/productImages/pizza14.png";
+import pizzaImage15 from "../../images/productImages/pizza15.png";
 
 
 import {
@@ -26,11 +40,32 @@ export default function CartCard({
   forCart,
 }: any) {
 
-
+// Only for Pizza!
+const image = [
+  pizzaImage1,
+  pizzaImage2,
+  pizzaImage3,
+  pizzaImage4,
+  pizzaImage5,
+  pizzaImage6,
+  pizzaImage7,
+  pizzaImage8,
+  pizzaImage9,
+  pizzaImage10,
+  pizzaImage11,
+  pizzaImage12,
+  pizzaImage13,
+  pizzaImage14,
+  pizzaImage15
+]
 
 
   const dispatch = useAppDispatch();
   const storeState: any = useAppSelector((state) => state?.products);
+
+
+
+
 
     const handleItemAdded = (foodPacket: any) => {
  
@@ -63,6 +98,17 @@ export default function CartCard({
   return (
     <MUICard sx={{ backgroundColor: "#F5F5DC",cursor:"pointer" }} key={key}>
 
+
+
+
+{'source' in foodPacket && ( <CardMedia
+        sx={{ height: 140 }}
+        image={image[foodPacket.source]}
+        title="Pizza Image"
+       
+      />
+
+     )}
       <CardContent sx={{ maxWidth:'30vw'}}>
       
        {forCart ? (<Typography variant="h5" component="div" 

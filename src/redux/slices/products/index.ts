@@ -178,20 +178,13 @@ const productSlice: any = createSlice({
       state.dataError = false;
 
       const isItemExsist = cartProducts?.find(
-        (item: any) => item?.id === action?.payload?.id
+        (item: any) => item?.id === action?.payload?.foodPacket?.id
       );
 
       if (!isItemExsist) {
-        let newObj = { ...action?.payload };
+        let newObj = { ...action?.payload?.foodPacket };
 
-        newObj.quantity = action?.payload?.quantity + 1;
-
-        successNotification({
-          msg: "Item added successfully!",
-          position: "bottom-right",
-          time: 500,
-          transitionName: Bounce,
-        });
+        newObj.quantity = action?.payload?.foodPacket?.quantity + action?.payload?.counter;
 
         let temp_arr = cartProducts;
 
@@ -207,12 +200,12 @@ const productSlice: any = createSlice({
         saveDataToLocalStorage("cartProducts", temp_arr);
       } else {
 
-        
+
         let IncreaseExsisting = isItemExsist;
 
-        IncreaseExsisting.quantity = IncreaseExsisting?.quantity + 1;
+        IncreaseExsisting.quantity = IncreaseExsisting?.quantity + action?.payload?.counter;
 
-        cartProducts[action.payload] = IncreaseExsisting;
+        cartProducts[action?.payload?.foodPacket] = IncreaseExsisting;
 
         state.cartItems = cartProducts ?? [];
         state.cartCount = cartProducts?.reduce(
@@ -234,6 +227,7 @@ const productSlice: any = createSlice({
 
 export default productSlice.reducer;
 
+
 export const {
   addToCart,
   setItemsToStore,
@@ -244,4 +238,5 @@ export const {
   clearAllItems,
   handleClickOpen,
   handleClose,
+  handleModalItemAdd
 } = productSlice.actions;

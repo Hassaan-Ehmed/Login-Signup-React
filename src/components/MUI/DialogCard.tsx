@@ -11,27 +11,65 @@ import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import SkipNextIcon from "@mui/icons-material/SkipNext";
 import pizzaImage from "../../images/productImages/pizza1.webp";
 import FavoriteIcon from "@mui/icons-material/Favorite";
-import { Button, ButtonGroup, Divider, Grid } from "@mui/material";
+import { Button, ButtonGroup, Divider, Grid, } from "@mui/material";
 import MiniPacket from "./MiniPacket";
 import MiniSlider from "./MiniSlider";
 import MUIAccordion from "./MUIAccordion";
-import { addToCart, decreaseItemQuantity, removeFromCart } from "../../redux/slices/products";
+import { addToCart, decreaseItemQuantity, handleClose, handleModalItemAdd, removeFromCart } from "../../redux/slices/products";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
-import { Bounce } from "react-toastify";
 import { successNotification } from "../../utils/Notifications";
 import { getDataToLocalStorage } from "../../utils/localstorage";
 import '../../App.css'
-
+import { Bounce } from "react-toastify";
+import { SafetyDivider } from "@mui/icons-material";
+import pizzaImage1 from "../../images/productImages/pizza1.webp";
+import pizzaImage2 from "../../images/productImages/pizza2.webp";
+import pizzaImage3 from "../../images/productImages/pizza3.png";
+import pizzaImage4 from "../../images/productImages/pizza4.png";
+import pizzaImage5 from "../../images/productImages/pizza5.png";
+import pizzaImage6 from "../../images/productImages/pizza6.png";
+import pizzaImage7 from "../../images/productImages/pizza7.png";
+import pizzaImage8 from "../../images/productImages/pizza8.png";
+import pizzaImage9 from "../../images/productImages/pizza9.webp";
+import pizzaImage10 from "../../images/productImages/pizza10.png";
+import pizzaImage11 from "../../images/productImages/pizza11.png";
+import pizzaImage12 from "../../images/productImages/pizza12.png";
+import pizzaImage13 from "../../images/productImages/pizza13.png";
+import pizzaImage14 from "../../images/productImages/pizza14.png";
+import pizzaImage15 from "../../images/productImages/pizza15.png";
+import '../../App.css'
 
 export default function DialogCard({selectedItem}:any) {
 
     const theme = useTheme();
+
+
+// Only for Pizza!
+const image = [
+  pizzaImage1,
+  pizzaImage2,
+  pizzaImage3,
+  pizzaImage4,
+  pizzaImage5,
+  pizzaImage6,
+  pizzaImage7,
+  pizzaImage8,
+  pizzaImage9,
+  pizzaImage10,
+  pizzaImage11,
+  pizzaImage12,
+  pizzaImage13,
+  pizzaImage14,
+  pizzaImage15
+]
 
     const storeState: any = useAppSelector((state) => state?.products);
 
   const [currentQuantity, setQuantity] = useState(0);
   const [counter, setCounter] = useState(1);
   const [itemPresent, setItemPresent] = useState(false);
+  const [price,setPrice] = useState(selectedItem.price);
+  const [size,setSize] = useState('')
 
   useEffect(() => {
     let cartProducts: any = getDataToLocalStorage("cartProducts") ?? [];
@@ -47,8 +85,6 @@ export default function DialogCard({selectedItem}:any) {
 
 
 
-
-
 const dispatch = useAppDispatch()
 
 
@@ -56,9 +92,27 @@ const dispatch = useAppDispatch()
 const handleItemAdded = (selectedItem: any) => {
 
 
+const readyObj = {
+    counter:counter,
+    foodPacket:selectedItem
+}
+    dispatch(handleModalItemAdd(readyObj));
+    
 
-    dispatch(addToCart(selectedItem));
+    successNotification({
 
+    msg:"Item added Successfully!",
+    position:"bottom-right",
+    time:600,
+    transitionName:Bounce
+    })
+
+
+    setTimeout(()=>{
+
+        dispatch(handleClose());
+
+    },800);
     // this success/warning msg have some conditons so i moved it to store in  addToCart  go store and check it
   };
 
@@ -96,9 +150,9 @@ const handleItemAdded = (selectedItem: any) => {
   const sizePacket = [
     {
         title:"Small",
-        text: selectedItem.price + (selectedItem.price / 4),
+        text: (selectedItem.price - (selectedItem.price / 3)).toFixed(2) ,
         selected:false,
-      
+
     },
     {
         title:"Medium",
@@ -107,7 +161,7 @@ const handleItemAdded = (selectedItem: any) => {
     },
     {
         title:"Large",
-        text: selectedItem.price + (selectedItem.price / 2),
+        text: (selectedItem.price + (selectedItem.price / 3)).toFixed(2),
         selected:false, 
      }
   ]
@@ -133,7 +187,7 @@ const handleItemAdded = (selectedItem: any) => {
 const pizzaCrustPacket = [
     {
         type:"Classical Crust",
-        check:false
+        check:true
     },
     {
         type:"Thin Crust",
@@ -174,19 +228,64 @@ if(action === "plus"){
 
     setCounter( counter + 1);
 
+    if(size === "Medium"){
+
+
+      setPrice( (selectedItem.price * counter).toFixed(2))
+
+    }else if (size  === "Small"){
+      
+      // setPrice( selectedItem.price * counter).toFixed(2);
+      setPrice(((selectedItem.price - (selectedItem.price / 3)) * counter).toFixed(2)); 
+
+  }
+    else if (size  === "Large"){
+      
+      // setPrice( selectedItem.price * counter).toFixed(2);
+      setPrice(((selectedItem.price + (selectedItem.price / 3)) * counter).toFixed(2)); 
+
+  }
+
+
+
 }else{
     if(counter > 1)    setCounter( counter  - 1);
 }
 
 }
-  return (
+
+const updatePrice = (selectedPrice:number,title:string)=>{
+
+  if(title === "Medium"){
+    
+    setSize(title)
+    
+    setPrice((selectedItem.price * counter).toFixed(2));
+    
+  }else if (title === "Small"){
+    
+    setSize(title)
+    setPrice((((selectedItem.price - (selectedItem.price / 3))) * counter).toFixed(2) )
+    
+  }else if (title === "Large"){
+    setSize(title)
+    
+    setPrice((((selectedItem.price + (selectedItem.price / 3))) * counter).toFixed(2) )
+  }
+  
+
+}
+
+
+
+return (
     <Grid container columns={12}  sx={{width:"100%",height:"100%"}}>
 
       <Grid item xl={5} sx={{width:"100%",height:"100%",display:"flex",justifyContent:"flex-start", alignItems:"center",overflow:"hidden" ,boxShadow:"1px 0px 4px -3px"}}>
        
 
         <img
-          src={pizzaImage}
+          src={image[selectedItem.source]}
           alt=""
           style={{
             width: "30vw",
@@ -214,7 +313,12 @@ if(action === "plus"){
         {/* 1st row */}
         <Grid item container style={{ display:"flex",justifyContent:"space-between",alignItems:'center'}}>
         <Grid item sx={{fontSize:"4vh",fontWeight:"bold",paddingLeft:"10px"}}>{selectedItem.title}</Grid>
-        {/* <Grid item><FavoriteIcon sx={{color:'lightgray',fontSize:"5vh"}}/></Grid> */}
+        <Grid item>
+          <FavoriteIcon sx={{color:"#D3D3D3",fontSize:"4vh",marginRight:"10px",cursor:"pointer"}}
+        
+          // onClick={()=>setIsFilled(!isFilled)}
+
+        /></Grid>
         <span style={{fontSize:'2vh',color:"gray",paddingLeft:"10px"}}>{selectedItem.desc}</span>
         
         </Grid>
@@ -278,7 +382,7 @@ sx={{
 
         </Grid>
 
-        <Grid item xl={4} lg={4} md={6} sm={12} xs={12} sx={{fontSize:'4vh',fontWeight:"bold",color:"#0078AC",paddingLeft:"10px",display:"flex",justifyContent:"center",alignItems:'center'}}>${selectedItem.price}</Grid>
+        <Grid item xl={4} lg={4} md={6} sm={12} xs={12} sx={{fontSize:'4vh',fontWeight:"bold",color:"#0078AC",paddingLeft:"10px",display:"flex",justifyContent:"center",alignItems:'center'}}>${price}</Grid>
         
 
         <Grid item xl={4} lg={4} md={6} sm={12} xs={12} sx={{display:"flex",justifyContent:"center",alignItems:'center'}}>
@@ -313,15 +417,16 @@ sx={{
 <Grid item container>
 
 
-<MiniPacket  cater={'SIZE'}  isEdge={false} dataPacket={sizePacket}/>
 
-<MiniPacket cater={'SLICE'} isEdge={false} dataPacket={slicePacket}/>
+<MiniPacket  cater={'SIZE'}  isEdge={false} dataPacket={sizePacket} updatePrice={updatePrice}/>
+
+ <MiniPacket cater={'SLICE'} isEdge={false} dataPacket={slicePacket}/>
 
 
  <MiniSlider cater={'CRUST'} isEdge={false} dataPacket={pizzaCrustPacket}/>
  <MiniSlider cater={'EDGE'} isEdge={true} dataPacket={pizzaEdgePacket}/>
-<MUIAccordion/>
 
+<MUIAccordion/>
 
 </Grid>
 </div>

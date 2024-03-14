@@ -47,13 +47,13 @@ const toppings = {
     
         "Mayonnaise",
     
-        "BBQ Sauce",
+        "BBQ",
     
         "Vegetables",
     
-        "Roasted B",
+        "Fish",
     
-        "Pepper Flakes",
+        "Flakes",
     
         "Jalapeno",
     
@@ -152,6 +152,9 @@ const rows = [
 
  
 ];
+
+
+
 
 export default function MUIAccordion() {
   return (
