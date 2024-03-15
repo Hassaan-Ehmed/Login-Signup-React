@@ -19,7 +19,7 @@ const toppings = {
 
     standard :[
 
-        "Meatballs",
+        "Meatballs",  
         "Miyo",
         "Pepporani",
         "Sauce",
@@ -83,9 +83,10 @@ const toppings = {
     }
 
 
-function createData(toppings:any) {
+function createData(toppings:any,toppingsCater:string) {
   return {
-    target: toppings
+    target: toppings,
+    toppingsCater
   };
 }
 
@@ -101,13 +102,11 @@ function Row(props: { row: ReturnType<typeof createData> }) {
           <IconButton
             aria-label="expand row"
             size="small"
-         
 
           >
             {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
           </IconButton>
 
-        
         </TableCell>
       
       </TableRow>
@@ -125,7 +124,7 @@ function Row(props: { row: ReturnType<typeof createData> }) {
                         <TableCell align="right" sx={{width:"30%"}}>
                         
               
-                        <FormControlLabel control={<Checkbox defaultChecked  sx={{
+  <FormControlLabel control={<Checkbox defaultChecked={ row.toppingsCater === "extra" ?  false : true  }  sx={{
                               color: red[700],
                               '&.Mui-checked': {
                                      color: red[700],
@@ -142,13 +141,13 @@ function Row(props: { row: ReturnType<typeof createData> }) {
           </Collapse>
         </TableCell>
       </TableRow>
-    </React.Fragment>
+    </React.Fragment>   
   );
 }
 
 const rows = [
-  createData(toppings.standard),
-  createData(toppings.extra),
+  createData(toppings.standard,"standard"),
+  createData(toppings.extra,"extra"),
 
  
 ];

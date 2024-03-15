@@ -41,37 +41,43 @@ import '../../App.css'
 
 export default function DialogCard({selectedItem}:any) {
 
-    const theme = useTheme();
-
-
-// Only for Pizza!
-const image = [
-  pizzaImage1,
-  pizzaImage2,
-  pizzaImage3,
-  pizzaImage4,
-  pizzaImage5,
-  pizzaImage6,
-  pizzaImage7,
-  pizzaImage8,
-  pizzaImage9,
-  pizzaImage10,
-  pizzaImage11,
-  pizzaImage12,
-  pizzaImage13,
-  pizzaImage14,
-  pizzaImage15
-]
-
-    const storeState: any = useAppSelector((state) => state?.products);
-
+  
+  const theme = useTheme();
+  
+  
+  // Only for Pizza!
+  const image = [
+    pizzaImage1,
+    pizzaImage2,
+    pizzaImage3,
+    pizzaImage4,
+    pizzaImage5,
+    pizzaImage6,
+    pizzaImage7,
+    pizzaImage8,
+    pizzaImage9,
+    pizzaImage10,
+    pizzaImage11,
+    pizzaImage12,
+    pizzaImage13,
+    pizzaImage14,
+    pizzaImage15
+  ]
+  
+  const storeState: any = useAppSelector((state) => state?.products);
+  
   const [currentQuantity, setQuantity] = useState(0);
   const [counter, setCounter] = useState(1);
   const [itemPresent, setItemPresent] = useState(false);
   const [price,setPrice] = useState(selectedItem.price);
-  const [size,setSize] = useState('')
-
+  const [size,setSize] = useState('Medium')
+  
   useEffect(() => {
+
+
+    console.log("Size",size);
+
+
     let cartProducts: any = getDataToLocalStorage("cartProducts") ?? [];
 
     const isPresent = cartProducts?.filter(
@@ -85,12 +91,51 @@ const image = [
 
 
 
+useEffect(()=>{
+
+
+
+
+    
+    if(size === "Medium"){
+      
+  
+      setPrice((selectedItem.price * counter).toFixed(2));
+  
+      }else if (size  === "Small"){
+        
+        setPrice(((selectedItem.price - (selectedItem.price / 3)) * counter).toFixed(2)); 
+  
+    }
+      else if (size  === "Large"){
+        
+        // setPrice( selectedItem.price * counter).toFixed(2);
+        setPrice(((selectedItem.price + (selectedItem.price / 3)) * counter).toFixed(2)); 
+  
+    }
+  
+  
+  
+  
+
+
+},[counter])
+
+
 const dispatch = useAppDispatch()
 
 
 
 const handleItemAdded = (selectedItem: any) => {
 
+
+  // const priceBySize = (price * counter ) / counter
+
+  // const priceUpdated = {
+    
+  //   ...selectedItem,
+  //   price:priceBySize
+  // } 
 
 const readyObj = {
     counter:counter,
@@ -113,38 +158,11 @@ const readyObj = {
         dispatch(handleClose());
 
     },800);
+
     // this success/warning msg have some conditons so i moved it to store in  addToCart  go store and check it
   };
 
 
-  function handleItemRemoved(foodPacket: any) {
-    dispatch(removeFromCart(foodPacket));
-
-    successNotification({
-      msg: "Item removed successfully !",
-      position: "bottom-right",
-      time: 500,
-      transitionName: Bounce,
-    });
-  }
-
-
-  const handleDecreaseQuanitity = (selectedItem: any) => {
-    if (currentQuantity > 0) {
-      if (currentQuantity === 1) {
-        dispatch(decreaseItemQuantity(selectedItem));
-        dispatch(removeFromCart(selectedItem));
-        successNotification({
-          msg: "Item removed successfully !",
-          position: "bottom-right",
-          time: 500,
-          transitionName: Bounce,
-        });
-      } else {
-        dispatch(decreaseItemQuantity(selectedItem));
-      }
-    }
-  };
 
 
   const sizePacket = [
@@ -224,31 +242,11 @@ const pizzaEdgePacket = [
 
 const handleCounter=(action:string,selectedItem:any)=>{
 
-if(action === "plus"){
 
-    setCounter( counter + 1);
+  if(action === 'plus'){
 
-    if(size === "Medium"){
-
-
-      setPrice( (selectedItem.price * counter).toFixed(2))
-
-    }else if (size  === "Small"){
-      
-      // setPrice( selectedItem.price * counter).toFixed(2);
-      setPrice(((selectedItem.price - (selectedItem.price / 3)) * counter).toFixed(2)); 
-
-  }
-    else if (size  === "Large"){
-      
-      // setPrice( selectedItem.price * counter).toFixed(2);
-      setPrice(((selectedItem.price + (selectedItem.price / 3)) * counter).toFixed(2)); 
-
-  }
-
-
-
-}else{
+    setCounter( counter + 1  );
+  }else{
     if(counter > 1)    setCounter( counter  - 1);
 }
 
@@ -257,8 +255,8 @@ if(action === "plus"){
 const updatePrice = (selectedPrice:number,title:string)=>{
 
   if(title === "Medium"){
-    
-    setSize(title)
+
+
     
     setPrice((selectedItem.price * counter).toFixed(2));
     
@@ -418,7 +416,7 @@ sx={{
 
 
 
-<MiniPacket  cater={'SIZE'}  isEdge={false} dataPacket={sizePacket} updatePrice={updatePrice}/>
+<MiniPacket  cater={'SIZE'}  isEdge={false} dataPacket={sizePacket} updatePrice={updatePrice} setSize={setSize} size={size}/>
 
  <MiniPacket cater={'SLICE'} isEdge={false} dataPacket={slicePacket}/>
 

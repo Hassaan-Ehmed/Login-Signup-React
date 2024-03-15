@@ -5,7 +5,7 @@ import pizzaOverlayBlue from '../../images/blue-pizza-overlay.webp'
 import pizzaOverlayBlack from '../../images/black-pizza-overlay.webp'
 
 
-const MiniPacket = ({cater,updatePrice,dataPacket}:any) => {
+const MiniPacket = ({cater,updatePrice,dataPacket,setSize,size}:any) => {
 
 const [data,setData] = useState(dataPacket);
 
@@ -31,9 +31,8 @@ if(typeof updatePrice === "function"){
 }
 
 
+
 const Slide = ({packet,indexNum}:any)=>{
-
-
 
   console.log('packet',packet);
 
