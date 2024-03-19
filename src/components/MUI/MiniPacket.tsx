@@ -34,7 +34,7 @@ if(typeof updatePrice === "function"){
 
 const Slide = ({packet,indexNum}:any)=>{
 
-  console.log('packet',packet);
+  // console.log('packet',packet);
 
 
     return (
@@ -46,25 +46,19 @@ const Slide = ({packet,indexNum}:any)=>{
   
       <img src={`${packet.selected  ? pizzaOverlayBlue : pizzaOverlayBlack }`} style={{width:"5vh",height:'5vh'}} />
 
-
-
       <p style={{marginLeft:"5px",fontWeight:"bold",fontSize:"1.5vh",color:`${packet.selected  ?  "#0276AE" : "black"}`,maxWidth: `${cater == "SIZE" ? "40%" : "50%"}`}}>
         {packet.title} <span style={{fontWeight:"normal",fontSize:"1.3vh",color:`${packet.selected  ? "white" : "#585858"}`,backgroundColor:`${packet.selected ? "#0276AE" : ""} `}}>{cater === "SIZE" && "$"}{packet.text}</span> 
         </p>
 
 
-    
     </Grid>
     )    
 }
 
 
-
   return (
 
-
     <>
-    
 
       <Grid item sx={{fontSize:"1vw",fontWeight:"bold",color:"#585858",paddingLeft:"1.5vh"}}>SELECT {cater ?? "Category"}</Grid>
 

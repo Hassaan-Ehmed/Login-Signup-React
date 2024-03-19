@@ -75,7 +75,7 @@ export default function DialogCard({selectedItem}:any) {
   useEffect(() => {
 
 
-    console.log("Size",size);
+    // console.log("Size",size);
 
 
     let cartProducts: any = getDataToLocalStorage("cartProducts") ?? [];
@@ -93,12 +93,7 @@ export default function DialogCard({selectedItem}:any) {
 
 useEffect(()=>{
 
-
-
-
-    
     if(size === "Medium"){
-      
   
       setPrice((selectedItem.price * counter).toFixed(2));
   
@@ -115,31 +110,58 @@ useEffect(()=>{
     }
   
   
-  
-  
-
-
 },[counter])
 
 
 const dispatch = useAppDispatch()
 
 
-
 const handleItemAdded = (selectedItem: any) => {
 
+  
+  console.warn("Size",size);
 
-  // const priceBySize = (price * counter ) / counter
 
-  // const priceUpdated = {
+  let priceUpdated = {}
+
+if(size === "Large"){
+
+  const priceBySize = (selectedItem.price + (selectedItem.price / 3)).toFixed(2)
+  
+  priceUpdated = {
     
-  //   ...selectedItem,
-  //   price:priceBySize
-  // } 
+    ...selectedItem,
+    price:priceBySize
+  } 
+  
+}else if (size === "Small"){
+ 
+  const priceBySize = (selectedItem.price - (selectedItem.price / 3)).toFixed(2)
+  
+  priceUpdated = {
+    
+    ...selectedItem,
+    price:priceBySize
+  } 
+  
+}else{
+
+  const priceBySize = selectedItem.price;
+  
+  priceUpdated = {  
+    ...selectedItem,
+    price:priceBySize
+  } 
+  
+
+
+}
+  
 
 const readyObj = {
     counter:counter,
-    foodPacket:selectedItem
+    size:size,
+    foodPacket:priceUpdated
 }
     dispatch(handleModalItemAdd(readyObj));
     
@@ -161,7 +183,6 @@ const readyObj = {
 
     // this success/warning msg have some conditons so i moved it to store in  addToCart  go store and check it
   };
-
 
 
 
@@ -242,11 +263,12 @@ const pizzaEdgePacket = [
 
 const handleCounter=(action:string,selectedItem:any)=>{
 
-
   if(action === 'plus'){
 
     setCounter( counter + 1  );
-  }else{
+  
+  }
+ else{
     if(counter > 1)    setCounter( counter  - 1);
 }
 
@@ -255,8 +277,6 @@ const handleCounter=(action:string,selectedItem:any)=>{
 const updatePrice = (selectedPrice:number,title:string)=>{
 
   if(title === "Medium"){
-
-
     
     setPrice((selectedItem.price * counter).toFixed(2));
     
@@ -273,8 +293,6 @@ const updatePrice = (selectedPrice:number,title:string)=>{
   
 
 }
-
-
 
 return (
     <Grid container columns={12}  sx={{width:"100%",height:"100%"}}>
@@ -294,10 +312,7 @@ return (
           }}
         />
 
-
-
-      <Divider orientation="vertical" variant="fullWidth"  />
-
+      <Divider orientation="vertical" variant="fullWidth"  />            
       </Grid>
 
 {/* <div style={{margin:'0 5px'}}></div> */}
@@ -317,6 +332,7 @@ return (
           // onClick={()=>setIsFilled(!isFilled)}
 
         /></Grid>
+   
         <span style={{fontSize:'2vh',color:"gray",paddingLeft:"10px"}}>{selectedItem.desc}</span>
         
         </Grid>

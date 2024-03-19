@@ -144,12 +144,14 @@ export default function ProductCard({
 
   return (
     <MUICard
+   
+    key={indexNum} 
+
       sx={{
         backgroundColor: "white",
         cursor: "pointer",
         boxShadow: "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px",
       }}
-      key={key}
     >
       <MUIDialog id={foodPacket?.id ?? null} />
 
@@ -222,6 +224,7 @@ export default function ProductCard({
               }}
               onClick={() => handleItemAdded(foodPacket)}
             >
+
               Add To Cart
             </Button>
           ) : (

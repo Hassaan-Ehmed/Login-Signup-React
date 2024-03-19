@@ -29,12 +29,16 @@ const productSlice: any = createSlice({
       let cartProducts: any = getDataToLocalStorage("cartProducts") ?? [];
 
       state.dataError = false;
+
       const isItemExsist = cartProducts?.find(
         (item: any) => item?.id === action?.payload?.id
       );
 
-      if (!isItemExsist) {
-        let newObj = { ...action?.payload };
+        if (!isItemExsist) {
+  
+
+          
+          let newObj = { ...action?.payload };
 
         newObj.quantity = action?.payload?.quantity + 1;
 
@@ -43,6 +47,7 @@ const productSlice: any = createSlice({
           position: "bottom-right",
           time: 500,
           transitionName: Bounce,
+                  
         });
 
         let temp_arr = cartProducts;
@@ -170,8 +175,7 @@ const productSlice: any = createSlice({
       // state.isOpen = true;
     },
 
-    handleModalItemAdd  : (state:any,action:any)=>{
-
+    handleModalItemAdd  : (state:any,action:any)=> {
 
       let cartProducts: any = getDataToLocalStorage("cartProducts") ?? [];
 
@@ -181,7 +185,11 @@ const productSlice: any = createSlice({
         (item: any) => item?.id === action?.payload?.foodPacket?.id
       );
 
-      if (!isItemExsist) {
+      const size = action?.payload?.size  ;
+
+      if (!isItemExsist ) {
+
+
         let newObj = { ...action?.payload?.foodPacket };
 
         newObj.quantity = action?.payload?.foodPacket?.quantity + action?.payload?.counter;
@@ -198,9 +206,11 @@ const productSlice: any = createSlice({
         );
 
         saveDataToLocalStorage("cartProducts", temp_arr);
-      } else {
+      
+      }
 
-
+      else {
+         
         let IncreaseExsisting = isItemExsist;
 
         IncreaseExsisting.quantity = IncreaseExsisting?.quantity + action?.payload?.counter;
@@ -216,8 +226,7 @@ const productSlice: any = createSlice({
         saveDataToLocalStorage("cartProducts", cartProducts);
       }
 
-
-    },
+    },  
 
     handleClose: (state: any, action: any) => {
       

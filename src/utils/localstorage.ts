@@ -31,7 +31,7 @@ export const getDataToLocalStorage = (key: string) => {
       return null;
     }
     decrypt_data = JSON.parse(decrypt_data);
-    console.log("decrypt_data", decrypt_data);
+    // console.log("decrypt_data", decrypt_data);
    
     return decrypt_data;
   } catch (error) {

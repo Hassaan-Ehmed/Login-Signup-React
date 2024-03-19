@@ -64,9 +64,6 @@ const image = [
   const storeState: any = useAppSelector((state) => state?.products);
 
 
-
-
-
     const handleItemAdded = (foodPacket: any) => {
  
       dispatch(addToCart(foodPacket));

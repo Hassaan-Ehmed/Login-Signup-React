@@ -63,8 +63,6 @@ total = new Intl.NumberFormat("en-US").format(total);
 totalQuantity = new Intl.NumberFormat("en-US").format(totalQuantity);
 
 
-
-
 const handleRemoveAllItems=()=>{
 
   dispatch(clearAllItems());
